@@ -1,0 +1,2018 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cosmos — معاينة التصميم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* Same tokens as src/index.css — this file is the design system, standalone. */
+  :root{
+    --void:#05060d; --surface:#0c0e1a; --surface-2:#141830; --surface-3:#1c2145;
+    --violet:#7c3aed; --violet-soft:#a78bfa; --indigo:#4338ca; --celeste:#5fd8ff;
+    --ink:#f8fafc; --ink-muted:#94a3b8;
+    --hairline:rgba(255,255,255,.08); --hairline-strong:rgba(255,255,255,.16);
+    --heading:"Readex Pro","IBM Plex Sans Arabic",sans-serif; --display:"IBM Plex Sans Arabic",system-ui,sans-serif; --mono:"IBM Plex Mono","IBM Plex Sans Arabic",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--void);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .tabular{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  a{color:inherit;text-decoration:none}
+  :where(a,button):focus-visible{outline:2px solid var(--celeste);outline-offset:2px;border-radius:4px}
+
+  .glow-violet{box-shadow:0 0 0 1px rgba(167,139,250,.14),0 0 24px -6px rgba(124,58,237,.5),0 0 64px -24px rgba(124,58,237,.4)}
+  .text-glow{text-shadow:0 0 28px rgba(167,139,250,.45)}
+  .nebula{background-image:radial-gradient(60% 50% at 15% 0%,rgba(67,56,202,.28),transparent 70%),radial-gradient(50% 45% at 85% 10%,rgba(124,58,237,.22),transparent 70%)}
+
+  /* ── hero ── */
+  .hero{position:relative;isolation:isolate;height:88vh;min-height:640px;overflow:hidden;background:#000}
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%}
+  .hero-copy{position:relative;z-index:10;height:100%;display:flex;align-items:center;padding:0 5vw}
+  .hero-copy > div{max-width:36rem}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--celeste);margin-bottom:1.25rem}
+  h1,h2,h3{font-family:var(--heading);letter-spacing:-.015em}
+  h1{font-weight:300;font-size:clamp(2.5rem,5.5vw,4rem);line-height:1.1;letter-spacing:-.02em}
+  .lede{margin-top:1.5rem;max-width:28rem;color:var(--ink-muted)}
+  .btns{margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.75rem}
+  .btn{display:flex;align-items:center;height:48px;padding:0 1.75rem;border-radius:999px;font-size:.875rem;font-weight:500;transition:.2s}
+  .btn-primary{background:var(--ink);color:var(--void)}
+  .btn-primary:hover{background:rgba(255,255,255,.9)}
+  .btn-ghost{border:1px solid var(--hairline-strong);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--violet-soft);color:var(--violet-soft)}
+
+  /* ── sections ── */
+  section.pad{padding:5rem 5vw}
+  .wrap{max-width:72rem;margin:0 auto}
+  h2{font-weight:300;font-size:clamp(1.75rem,3vw,2.25rem);letter-spacing:-.02em}
+  .sub{margin-top:.75rem;color:var(--ink-muted);max-width:36rem}
+
+  /* ── planet cards ── */
+  .grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));margin-top:3rem;list-style:none}
+  .card{display:block;height:100%;padding:1rem;border-radius:.75rem;border:1px solid var(--hairline);
+        background:linear-gradient(160deg,#0c0e1a 0%,#141830 100%);transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s}
+  .card:hover{transform:translateY(-4px)}
+  .pwrap{height:11rem;display:flex;align-items:center;justify-content:center;margin-bottom:.25rem}
+  .stars{display:none;height:9rem;display:grid;grid-template-columns:repeat(18,1fr);gap:1px;padding:.25rem;margin-bottom:.5rem}
+  .stars i{width:1px;height:1px;border-radius:50%;background:#666;justify-self:center;align-self:center;display:block}
+  .card:hover .stars i{background:#fff;box-shadow:0 0 4px 1px rgba(95,216,255,.7)}
+  .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem}
+  .card h3{font-size:1.5rem;font-weight:700;letter-spacing:-.01em}
+  .card .en{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-muted);margin-top:.1rem;direction:ltr;text-align:start}
+  /* When the secondary name is the Arabic one, the Latin treatment has to come
+     off: letter-spacing breaks the cursive joins and uppercase means nothing. */
+  .card .en.as-arabic{font-family:var(--display);letter-spacing:normal;text-transform:none;font-size:.8rem;direction:rtl}
+  /* The number and its unit must never split across lines. */
+  .card dd{white-space:nowrap}
+
+  .chip{flex-shrink:0;border-radius:999px;padding:.25rem .6rem;font-size:11px;font-weight:500;margin-top:.25rem}
+  .card .tag{margin-top:.75rem;font-size:.875rem;color:var(--ink-muted)}
+  .card dl{margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--hairline);display:grid;grid-template-columns:1fr 1fr;gap:.375rem 1rem;font-family:var(--mono);font-size:.72rem}
+  /* Label above value: side by side, a wide value like "142,984 km" outgrew
+     its half of the grid and printed over the next column. */
+  .card dl > div{min-width:0}
+  .card dt{color:var(--ink-muted)}
+  .card dd{margin-top:.25rem;overflow:hidden;text-overflow:ellipsis}
+
+  /* ── table ── */
+  .tablewrap{margin-top:2rem;border:1px solid var(--hairline);border-radius:.75rem;overflow:hidden;background:rgba(12,14,26,.6)}
+  table{width:100%;border-collapse:collapse;font-size:.875rem}
+  thead th{height:44px;padding:0 1rem;text-align:start;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-muted);border-bottom:1px solid var(--hairline);white-space:nowrap}
+  tbody tr{border-bottom:1px solid var(--hairline);transition:background .2s}
+  tbody tr:last-child{border-bottom:0}
+  tbody tr:hover{background:rgba(20,24,48,.6)}
+  tbody th{padding:.75rem 1rem;text-align:start;font-weight:400;color:var(--ink-muted)}
+  tbody td{padding:.75rem 1rem}
+  td.val{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  td.unit{color:var(--ink-muted);font-size:.8rem}
+
+  /* ── swatches ── */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;margin-top:2rem;list-style:none}
+  .sw{border:1px solid var(--hairline);border-radius:.6rem;overflow:hidden}
+  .sw .chipbox{height:64px}
+  .sw .meta{padding:.6rem .75rem;font-family:var(--mono);font-size:.7rem}
+  .sw .meta b{display:block;font-weight:500;color:var(--ink)}
+  .sw .meta span{color:var(--ink-muted)}
+
+  .note{margin-top:1rem;font-size:.8rem;color:var(--ink-muted)}
+  hr.sep{border:0;border-top:1px solid var(--hairline);margin:0 5vw}
+
+  /* Language switch */
+  .langbar{position:fixed;top:14px;inset-inline-start:14px;z-index:99;display:flex;gap:2px;
+    padding:2px;border:1px solid rgba(255,255,255,.10);border-radius:999px;
+    background:rgba(12,14,26,.82);backdrop-filter:blur(12px)}
+  .langbar button{min-width:44px;height:36px;padding:0 12px;border:0;border-radius:999px;
+    background:transparent;color:#94a3b8;font:inherit;font-size:13px;cursor:pointer;
+    transition:background .2s,color .2s}
+  .langbar button:hover{color:#f8fafc}
+  /* Filled, not just brighter: state is never carried by colour alone. */
+  .langbar button[aria-pressed="true"]{background:#1c2145;color:#f8fafc;font-weight:500}
+  .langbar button:focus-visible{outline:2px solid #5fd8ff;outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- Language switch. The whole page flips direction with it. -->
+<div class="langbar" role="group" aria-label="Language">
+  <button type="button" data-lang="ar" lang="ar">ع</button>
+  <button type="button" data-lang="en" lang="en">EN</button>
+</div>
+
+<!-- ═══ HERO — the 21st.dev Orbital Hero Section, same canvas maths ═══ -->
+<section class="hero">
+  <canvas id="orbit" aria-hidden="true"></canvas>
+  <div class="hero-copy">
+    <div>
+      <p class="eyebrow" data-t="home.eyebrow"></p>
+      <h1 class="text-glow" data-t2="home.title1|home.title2"></h1>
+      <p class="lede" data-t="home.lede"></p>
+      <div class="btns">
+        <a class="btn btn-primary" href="#planets" data-t="home.ctaPlanets"></a>
+        <a class="btn btn-ghost" href="#data" data-t="home.ctaTimeline"></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PLANET CARDS ═══ -->
+<section class="pad nebula" id="planets">
+  <div class="wrap">
+    <h2 data-t="planets.title"></h2>
+    <p class="sub" data-p="cards"></p>
+    <ul class="grid" id="cards"></ul>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ═══ DATA TABLE ═══ -->
+<section class="pad" id="data">
+  <div class="wrap">
+    <h2 data-p="tableTitle"></h2>
+    <p class="sub" data-p="tableSub"></p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th scope="col" data-t="detail.colProperty"></th>
+          <th scope="col" data-t="detail.colValue"></th>
+          <th scope="col" data-t="detail.colUnit"></th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="note" data-t="detail.tableSource"></p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ═══ PALETTE ═══ -->
+<section class="pad">
+  <div class="wrap">
+    <h2 data-p="paletteTitle"></h2>
+    <p class="sub" data-p="paletteSub"></p>
+    <ul class="swatches" id="swatches"></ul>
+    <p class="note" data-p="fonts"></p>
+  </div>
+</section>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   Orbital hero — the same algorithm as src/components/ui/orbital-hero-section.tsx
+   (21st.dev · @yura), types stripped so it runs with no build step.
+   Real J2000 orbital elements, Kepler's equation, helical wakes.
+   ══════════════════════════════════════════════════════════════════════════ */
+const SOLAR_SYSTEM=[
+ {name:"Mercury",a:.3871,e:.20563,i:7.005,node:48.331,peri:29.125,M0:174.796,color:"#fff0d0",size:2.2},
+ {name:"Venus",a:.72333,e:.00677,i:3.395,node:76.68,peri:54.853,M0:50.115,color:"#ffc65a",size:3.4},
+ {name:"Earth",a:1,e:.01671,i:0,node:348.739,peri:114.208,M0:357.517,color:"#5fd8ff",size:3.8,glow:1.1},
+ {name:"Mars",a:1.52371,e:.09339,i:1.85,node:49.558,peri:286.483,M0:19.373,color:"#ff4a32",size:2.9},
+ {name:"Jupiter",a:5.2029,e:.04839,i:1.303,node:100.464,peri:273.867,M0:20.02,color:"#ffa62e",size:5.4},
+ {name:"Saturn",a:9.537,e:.05386,i:2.485,node:113.665,peri:339.392,M0:317.02,color:"#ffd884",size:4.8},
+ {name:"Uranus",a:19.1913,e:.04726,i:.773,node:74.006,peri:98.999,M0:142.238,color:"#7fe6ff",size:4.2},
+ {name:"Neptune",a:30.069,e:.00859,i:1.77,node:131.784,peri:276.336,M0:256.228,color:"#3f7dff",size:4.4}];
+const PLANE_FAN=[[58,35],[27,145],[71,250],[40,80],[84,190],[33,310],[62,120],[15,20]];
+const ECC_FAN=[.52,.34,.63,.44,.3,.58,.4,.68];
+const TAU=Math.PI*2, RAD=Math.PI/180;
+
+const CFG={yearSeconds:16,trailYears:2.6,compress:.42,maxTurns:3,planeSpread:1,eccentricity:.25,
+ alignToCourse:1,driftSpeed:1.5,apex:[272,53],viewRadius:3.2,tilt:45,spin:252,roll:13.5,lead:.12,
+ /* RTL: the copy sits on the right, so the art has to sit on the left and the
+    scrim has to darken the right. Getting these two the same way round is what
+    makes the headline collide with the orbits. */
+ focus:[.28,.45],scrim:"right",scrimStrength:.92,starCount:1500,glow:1,showOrbits:true,
+ showSunTrack:true,sunColor:"#FFF2CC"};
+
+function eccentricAnomaly(M,e){let m=M%TAU;if(m<0)m+=TAU;let E=m+e*Math.sin(m)*(1+e*Math.cos(m));
+ for(let k=0;k<8;k++){const s=(E-e*Math.sin(E)-m)/(1-e*Math.cos(E));E-=s;if(Math.abs(s)<1e-10)break}return E}
+function parseRGB(c){c=c.trim();if(c[0]==="#"){const h=c.slice(1),f=h.length===3?h[0]+h[0]+h[1]+h[1]+h[2]+h[2]:h.slice(0,6),n=parseInt(f,16);return[(n>>16)&255,(n>>8)&255,n&255]}return[255,255,255]}
+function mulberry32(seed){let t=seed>>>0;return()=>{t+=0x6d2b79f5;let x=t;x=Math.imul(x^(x>>>15),x|1);x^=x+Math.imul(x^(x>>>7),x|61);return((x^(x>>>14))>>>0)/4294967296}}
+
+(function(){
+const canvas=document.getElementById("orbit"), host=canvas.parentElement, ctx=canvas.getContext("2d",{alpha:false});
+const reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let width=0,height=0,dpr=1,years=reduced?1.7:0,lastFrame=0,raf=0;
+let pxPerAU=1,cx=0,cy=0,camDist=1,dist=0;
+const RIGHT={x:1,y:0,z:0},UP={x:0,y:1,z:0},FWD={x:0,y:0,z:1},DIR={x:0,y:0,z:0};
+const P={x:0,y:0,depth:0,s:0,ok:false},R3={x:0,y:0,z:0};
+
+function setCamera(yaw,pitch,roll){const A=yaw*RAD,B=pitch*RAD,ca=Math.cos(A),sa=Math.sin(A),cb=Math.cos(B),sb=Math.sin(B);
+ const rx=ca,ry=sa,rz=0,ux=-sa*cb,uy=ca*cb,uz=sb;FWD.x=sa*sb;FWD.y=-ca*sb;FWD.z=cb;
+ const C=roll*RAD,cr=Math.cos(C),sr=Math.sin(C);
+ RIGHT.x=rx*cr+ux*sr;RIGHT.y=ry*cr+uy*sr;RIGHT.z=rz*cr+uz*sr;
+ UP.x=-rx*sr+ux*cr;UP.y=-ry*sr+uy*cr;UP.z=-rz*sr+uz*cr}
+function setApex(lon,lat){const l=lon*RAD,b=lat*RAD;DIR.x=Math.cos(b)*Math.cos(l);DIR.y=Math.cos(b)*Math.sin(l);DIR.z=Math.sin(b)}
+function project(dx,dy,dz){const vx=dx*RIGHT.x+dy*RIGHT.y+dz*RIGHT.z,vy=dx*UP.x+dy*UP.y+dz*UP.z,vz=dx*FWD.x+dy*FWD.y+dz*FWD.z;
+ const depth=camDist-vz;if(depth<.6){P.ok=false;return}const s=camDist/depth;
+ P.x=cx+vx*pxPerAU*s;P.y=cy-vy*pxPerAU*s;P.depth=depth;P.s=s;P.ok=true}
+
+function swingToCourse(nx,ny,nz,align){const s=nx*DIR.x+ny*DIR.y+nz*DIR.z>=0?1:-1;
+ let tx=nx+align*(s*DIR.x-nx),ty=ny+align*(s*DIR.y-ny),tz=nz+align*(s*DIR.z-nz);
+ const tl=Math.hypot(tx,ty,tz);if(tl<1e-9)return null;tx/=tl;ty/=tl;tz/=tl;
+ let ax=ny*tz-nz*ty,ay=nz*tx-nx*tz,az=nx*ty-ny*tx;const al=Math.hypot(ax,ay,az);if(al<1e-9)return null;
+ ax/=al;ay/=al;az/=al;const c=Math.max(-1,Math.min(1,nx*tx+ny*ty+nz*tz)),sA=al>1?1:al,k=1-c;
+ return[c+ax*ax*k,ax*ay*k-az*sA,ax*az*k+ay*sA,ay*ax*k+az*sA,c+ay*ay*k,ay*az*k-ax*sA,az*ax*k-ay*sA,az*ay*k+ax*sA,c+az*az*k]}
+
+function elementsOf(p,index,gamma,spread,ecc,align){const aDraw=Math.pow(p.a,gamma),period=Math.pow(aDraw,1.5);
+ const fan=PLANE_FAN[index%PLANE_FAN.length],inc=(p.i+spread*fan[0])*RAD,node=(p.node+spread*fan[1])*RAD;
+ const target=ECC_FAN[index%ECC_FAN.length],ci=Math.cos(inc),si=Math.sin(inc),cn=Math.cos(node),sn=Math.sin(node);
+ return{p,rgb:parseRGB(p.color),e:Math.min(.85,p.e+ecc*(target-p.e)),period,n:TAU/period,
+  cw:Math.cos(p.peri*RAD),sw:Math.sin(p.peri*RAD),ci,si,cn,sn,M0:p.M0*RAD,
+  swing:align>0?swingToCourse(si*sn,-si*cn,ci,align):null}}
+
+function helio(el,M,gamma){const e=el.e,E=eccentricAnomaly(M,e);
+ const xo=el.p.a*(Math.cos(E)-e),yo=el.p.a*Math.sqrt(1-e*e)*Math.sin(E);
+ const x1=xo*el.cw-yo*el.sw,y1=xo*el.sw+yo*el.cw,y2=y1*el.ci,z2=y1*el.si;
+ let x=x1*el.cn-y2*el.sn,y=x1*el.sn+y2*el.cn,z=z2;const S=el.swing;
+ if(S){const rx=S[0]*x+S[1]*y+S[2]*z,ry=S[3]*x+S[4]*y+S[5]*z,rz=S[6]*x+S[7]*y+S[8]*z;x=rx;y=ry;z=rz}
+ if(gamma!==1){const r=Math.sqrt(x*x+y*y+z*z);if(r>1e-9){const s=Math.pow(r,gamma-1);x*=s;y*=s;z*=s}}
+ R3.x=x;R3.y=y;R3.z=z}
+
+let D_NEAR=60,D_FAR=1400,sx=[],sy=[],sz=[],sMag=[],sPhase=[],sTint=[],starN=0,rand=mulberry32(0xc0ffee);
+function seedStar(k,depth,edge){const d=depth??D_NEAR*Math.pow(D_FAR/D_NEAR,Math.pow(rand(),.55));
+ const halfW=width*.5*1.15,halfH=height*.5*1.15;let ox,oy;
+ if(edge===0){ox=-halfW;oy=(rand()*2-1)*halfH}else if(edge===1){ox=halfW;oy=(rand()*2-1)*halfH}
+ else if(edge===2){ox=(rand()*2-1)*halfW;oy=-halfH}else if(edge===3){ox=(rand()*2-1)*halfW;oy=halfH}
+ else{ox=(rand()*2-1)*halfW;oy=(rand()*2-1)*halfH}
+ const scale=d/(camDist*pxPerAU),vx=ox*scale,vy=-oy*scale,vz=camDist-d;
+ sx[k]=vx*RIGHT.x+vy*UP.x+vz*FWD.x+DIR.x*dist;
+ sy[k]=vx*RIGHT.y+vy*UP.y+vz*FWD.y+DIR.y*dist;
+ sz[k]=vx*RIGHT.z+vy*UP.z+vz*FWD.z+DIR.z*dist;
+ sMag[k]=Math.pow(rand(),2.4);sPhase[k]=rand()*TAU;const t=rand();sTint[k]=t>.9?1:t<.08?2:0}
+function buildStars(){starN=Math.max(60,Math.round(CFG.starCount*Math.min(2,width*height/(1440*900))));
+ sx=new Float64Array(starN);sy=new Float64Array(starN);sz=new Float64Array(starN);
+ sMag=new Float64Array(starN);sPhase=new Float64Array(starN);sTint=new Uint8Array(starN);
+ rand=mulberry32(0xc0ffee);for(let k=0;k<starN;k++)seedStar(k)}
+
+const glowCache=new Map();
+function glowSprite(color){if(glowCache.has(color))return glowCache.get(color);
+ const R=64,c=document.createElement("canvas");c.width=c.height=R*2;const g=c.getContext("2d");
+ const[r,gg,b]=parseRGB(color),grad=g.createRadialGradient(R,R,0,R,R,R);
+ grad.addColorStop(0,"rgba(255,255,255,1)");grad.addColorStop(.15,`rgba(${r},${gg},${b},0.95)`);
+ grad.addColorStop(.36,`rgba(${r},${gg},${b},0.26)`);grad.addColorStop(.66,`rgba(${r},${gg},${b},0.05)`);
+ grad.addColorStop(1,`rgba(${r},${gg},${b},0)`);g.fillStyle=grad;g.fillRect(0,0,R*2,R*2);
+ glowCache.set(color,c);return c}
+
+function layout(){pxPerAU=Math.min(width,height)*.5/CFG.viewRadius;camDist=CFG.viewRadius*3.1;
+ D_NEAR=camDist*5;D_FAR=camDist*120;setApex(CFG.apex[0],CFG.apex[1]);setCamera(CFG.spin,CFG.tilt,CFG.roll)}
+function resize(){const r=host.getBoundingClientRect(),w=Math.max(1,r.width),h=Math.max(1,r.height);
+ dpr=Math.min(window.devicePixelRatio||1,2);if(w===width&&h===height)return;
+ width=w;height=h;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);layout();buildStars()}
+
+let elems=[];
+function drawSun(k,t){const[r,g,b]=parseRGB(CFG.sunColor);const pulse=1+Math.sin(t*2.1)*.02;
+ const R=Math.max(5,Math.min(width,height)*.013)*pulse;
+ const haze=ctx.createRadialGradient(cx,cy,0,cx,cy,R*14);
+ haze.addColorStop(0,`rgba(${r},${g},${b},${.05*k})`);haze.addColorStop(.4,`rgba(255,190,110,${.014*k})`);
+ haze.addColorStop(1,"rgba(255,160,80,0)");ctx.fillStyle=haze;ctx.beginPath();ctx.arc(cx,cy,R*14,0,TAU);ctx.fill();
+ const outer=ctx.createRadialGradient(cx,cy,0,cx,cy,R*4.6);
+ outer.addColorStop(0,`rgba(${r},${g},${b},${.34*k})`);outer.addColorStop(.3,`rgba(255,222,160,${.1*k})`);
+ outer.addColorStop(.62,`rgba(255,196,110,${.025*k})`);outer.addColorStop(1,"rgba(255,180,90,0)");
+ ctx.fillStyle=outer;ctx.beginPath();ctx.arc(cx,cy,R*4.6,0,TAU);ctx.fill();
+ const bloom=ctx.createRadialGradient(cx,cy,0,cx,cy,R*2.3);
+ bloom.addColorStop(0,`rgba(255,255,255,${k})`);bloom.addColorStop(.42,`rgba(255,252,240,${.7*k})`);
+ bloom.addColorStop(.72,`rgba(${r},${g},${b},${.22*k})`);bloom.addColorStop(1,"rgba(255,210,140,0)");
+ ctx.fillStyle=bloom;ctx.beginPath();ctx.arc(cx,cy,R*2.3,0,TAU);ctx.fill();
+ ctx.fillStyle="rgba(255,255,255,1)";ctx.beginPath();ctx.arc(cx,cy,R,0,TAU);ctx.fill()}
+
+function render(t){const k=CFG.glow;layout();
+ if(!elems.length)elems=SOLAR_SYSTEM.map((p,i)=>elementsOf(p,i,CFG.compress,CFG.planeSpread,CFG.eccentricity,CFG.alignToCourse));
+ dist=CFG.driftSpeed*t;cx=width*CFG.focus[0];cy=height*CFG.focus[1];
+ project(DIR.x,DIR.y,DIR.z);
+ if(P.ok){const dxs=P.x-cx,dys=P.y-cy,len=Math.hypot(dxs,dys)||1,push=Math.min(width,height)*CFG.lead;
+  cx+=dxs/len*push;cy+=dys/len*push}
+ ctx.globalCompositeOperation="source-over";ctx.fillStyle="#000";ctx.fillRect(0,0,width,height);
+ ctx.globalCompositeOperation="lighter";
+
+ const dRef=D_NEAR*3.3,left=-width*.12,right=width*1.12,top=-height*.12,bottom=height*1.12;
+ for(let s=0;s<starN;s++){project(sx[s]-DIR.x*dist,sy[s]-DIR.y*dist,sz[s]-DIR.z*dist);
+  if(!P.ok||P.depth>D_FAR*1.25){seedStar(s);continue}
+  if(P.x<left||P.x>right||P.y<top||P.y>bottom){seedStar(s,undefined,P.x<left?1:P.x>right?0:P.y<top?3:2);continue}
+  if(P.depth<D_NEAR*.75)continue;
+  const near=Math.min(1,(P.depth-D_NEAR*.75)/(D_NEAR*.6)),far=1-Math.max(0,(P.depth-D_FAR*.78)/(D_FAR*.32));
+  let a=(.2+sMag[s]*1.05)*Math.pow(dRef/P.depth,.8)*near*far;if(a<=.012)continue;
+  a*=.82+.18*Math.sin(t*9+sPhase[s]);
+  const col=sTint[s]===1?"175,205,255":sTint[s]===2?"255,214,170":"255,255,255";
+  const size=Math.min(2.3,.55+sMag[s]*1.5*Math.pow(dRef/P.depth,.5));
+  ctx.fillStyle=`rgba(${col},${Math.min(1,a).toFixed(3)})`;
+  if(size<1.05)ctx.fillRect(P.x,P.y,size,size);else{ctx.beginPath();ctx.arc(P.x,P.y,size*.5,0,TAU);ctx.fill()}}
+
+ if(CFG.showSunTrack){const back=CFG.driftSpeed*CFG.trailYears*1.1;project(0,0,0);const hx=P.x,hy=P.y;
+  project(-DIR.x*back,-DIR.y*back,-DIR.z*back);
+  if(P.ok){const grad=ctx.createLinearGradient(hx,hy,P.x,P.y);
+   grad.addColorStop(0,`rgba(255,246,214,${k})`);grad.addColorStop(.45,`rgba(255,206,110,${.55*k})`);
+   grad.addColorStop(1,"rgba(255,180,80,0)");ctx.strokeStyle=grad;ctx.lineCap="round";
+   ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(P.x,P.y);
+   ctx.lineWidth=11;ctx.globalAlpha=.16;ctx.stroke();
+   ctx.lineWidth=4;ctx.globalAlpha=.3;ctx.stroke();
+   ctx.globalAlpha=1;ctx.lineWidth=1.8;ctx.stroke()}}
+
+ if(CFG.showOrbits){for(const el of elems){const[r,g,b]=el.rgb;ctx.beginPath();let started=false;
+  for(let q=0;q<=160;q++){const E=q/160*TAU,M=E-el.e*Math.sin(E);helio(el,M,CFG.compress);
+   project(R3.x,R3.y,R3.z);if(!P.ok){started=false;continue}
+   if(!started){ctx.moveTo(P.x,P.y);started=true}else ctx.lineTo(P.x,P.y)}
+  ctx.strokeStyle=`rgba(${r},${g},${b},${.045*k})`;ctx.lineWidth=4;ctx.stroke();
+  ctx.strokeStyle=`rgba(${r},${g},${b},${.3*k})`;ctx.lineWidth=1;ctx.stroke()}}
+
+ const shots=[];
+ for(const el of elems){const[r,g,b]=el.rgb,bright=(el.p.glow??1)*k;
+  const span=Math.min(CFG.trailYears,CFG.maxTurns*el.period),turns=span/el.period;
+  const N=Math.max(48,Math.min(360,Math.ceil(turns*46*(1+2.2*el.e))+48));
+  const xs=new Float64Array(N+1),ys=new Float64Array(N+1),ok=new Uint8Array(N+1);
+  for(let q=0;q<=N;q++){const age=(1-q/N)*span,M=el.M0+el.n*(t-age);helio(el,M,CFG.compress);
+   const back=CFG.driftSpeed*age;project(R3.x-DIR.x*back,R3.y-DIR.y*back,R3.z-DIR.z*back);
+   xs[q]=P.x;ys[q]=P.y;ok[q]=P.ok?1:0;
+   if(q===N&&P.ok)shots.push({el,x:P.x,y:P.y,depth:P.depth,s:P.s})}
+  const stroke=(from,to,alpha,wide)=>{ctx.strokeStyle=`rgba(${r},${g},${b},${alpha.toFixed(3)})`;
+   ctx.lineWidth=wide;ctx.beginPath();let st=false;
+   for(let q=from;q<=to;q++){if(!ok[q]){st=false;continue}
+    if(!st){ctx.moveTo(xs[q],ys[q]);st=true}else ctx.lineTo(xs[q],ys[q])}ctx.stroke()};
+  ctx.lineCap="round";ctx.lineJoin="round";
+  stroke(Math.floor(N*.72),N,.05*bright,6.5);stroke(Math.floor(N*.86),N,.05*bright,3);
+  ctx.lineCap="butt";ctx.lineWidth=1.3;
+  for(let q=0;q<N;q++){if(!ok[q]||!ok[q+1])continue;const f=(q+1)/N,a=Math.pow(f,2.6)*.95*bright;
+   if(a<.005)continue;ctx.strokeStyle=`rgba(${r},${g},${b},${a.toFixed(3)})`;
+   ctx.beginPath();ctx.moveTo(xs[q],ys[q]);ctx.lineTo(xs[q+1],ys[q+1]);ctx.stroke()}}
+
+ shots.sort((p,q)=>q.depth-p.depth);
+ const sizeScale=Math.min(width,height)/660;
+ const drawShot=o=>{const depth=Math.min(1.3,Math.max(.5,o.s)),size=o.el.p.size*depth*sizeScale;
+  const bright=(o.el.p.glow??1)*k,R=size*3.3;
+  ctx.globalAlpha=Math.min(1,.9*bright);ctx.drawImage(glowSprite(o.el.p.color),o.x-R,o.y-R,R*2,R*2);
+  ctx.globalAlpha=1;ctx.fillStyle="rgba(255,255,255,0.95)";ctx.beginPath();ctx.arc(o.x,o.y,size*.5,0,TAU);ctx.fill()};
+ let idx=0;while(idx<shots.length&&shots[idx].depth>camDist)drawShot(shots[idx++]);
+ drawSun(k,t);while(idx<shots.length)drawShot(shots[idx++]);
+ ctx.globalCompositeOperation="source-over";
+
+ /* scrim: darken only the edge the copy sits on */
+ if(CFG.scrim!=="none"){const s=CFG.scrimStrength;
+  const g=CFG.scrim==="left"?ctx.createLinearGradient(0,0,width,0):
+          CFG.scrim==="right"?ctx.createLinearGradient(width,0,0,0):
+          CFG.scrim==="top"?ctx.createLinearGradient(0,0,0,height):ctx.createLinearGradient(0,height,0,0);
+  for(let q=0;q<=12;q++){const x=q/12;g.addColorStop(x,`rgba(0,0,0,${(s*Math.pow(1-x,2.4)).toFixed(4)})`)}
+  ctx.fillStyle=g;ctx.fillRect(0,0,width,height)}}
+
+function tick(now){raf=requestAnimationFrame(tick);
+ const dt=lastFrame?Math.min(.05,(now-lastFrame)/1000):0;lastFrame=now;
+ if(!reduced)years+=dt/CFG.yearSeconds;render(years)}
+resize();render(years);
+if(!reduced)raf=requestAnimationFrame(tick);
+new ResizeObserver(()=>{resize();if(reduced)render(years)}).observe(host);
+
+/* The copy sits at the start of the line, so it lands on the right in Arabic
+   and the left in English. The art has to be pushed the other way and the
+   scrim has to darken whichever edge the text ended up on. */
+window.setHeroSide=function(rtl){
+ CFG.focus=rtl?[.28,.45]:[.72,.45];
+ CFG.scrim=rtl?"right":"left";
+ render(years);
+};
+})();
+
+/* Content rendering moved below, after renderPlanet is defined. */
+</script>
+<script>
+/* >>> generated: content <<< */
+/* Generated from src/i18n/strings.ts, src/data/planets.ts, src/data/timeline.ts — do not edit here. */
+/**
+ * Every piece of interface text, in both languages.
+ *
+ * Keeping the two side by side in one file rather than in parallel ar/en files
+ * is deliberate: a missing translation is visible the moment you look at the
+ * entry, instead of hiding as an absent key in a file nobody opened.
+ *
+ * Content that belongs to the subject matter rather than the interface — the
+ * planets, the timeline — lives with its data in src/data/, in the same shape.
+ */
+const UI = {
+    /* --- navigation ------------------------------------------------------- */
+    "nav.brand": { ar: "Cosmos", en: "Cosmos" },
+    "nav.home": { ar: "الرئيسية", en: "Home" },
+    "nav.planets": { ar: "الكواكب", en: "Planets" },
+    "nav.timeline": { ar: "الخط الزمني", en: "Timeline" },
+    "nav.label": { ar: "التنقل الرئيسي", en: "Main navigation" },
+    "nav.skip": { ar: "تخطَّ إلى المحتوى", en: "Skip to content" },
+    /* --- language switch -------------------------------------------------- */
+    "lang.label": { ar: "اللغة", en: "Language" },
+    "lang.switchTo": { ar: "التبديل إلى الإنجليزية", en: "Switch to Arabic" },
+    /* --- home ------------------------------------------------------------- */
+    "home.eyebrow": { ar: "المجموعة الشمسية", en: "The Solar System" },
+    "home.title1": { ar: "لا شيء هنا", en: "Nothing here" },
+    "home.title2": { ar: "يقف ساكناً", en: "stands still" },
+    "home.lede": {
+        ar: "الشمس نفسها تجري بسرعة ١٩.٤ كيلومتر في الثانية، والكواكب تلاحقها. المسار الذي يرسمه كل كوكب في الفضاء ليس دائرة — بل حلزون.",
+        en: "The Sun itself travels at 19.4 kilometres a second, and the planets chase it. The path each one traces through space is not a circle — it is a helix.",
+    },
+    "home.ctaPlanets": { ar: "استكشف الكواكب الثمانية", en: "Explore all eight planets" },
+    "home.ctaTimeline": { ar: "تاريخ الكون", en: "History of the universe" },
+    "home.featured": { ar: "أبرز الكواكب", en: "Featured planets" },
+    "home.featuredLede": {
+        ar: "أربعة عوالم اختيرت لتباينها: كوكب فيه حياة، وعملاق أثقل من كل الباقي مجتمعاً، وآخر بحلقات من الجليد، ورابع يدور على جنبه.",
+        en: "Four worlds picked for contrast: one with life on it, one heavier than everything else combined, one ringed with ice, and one that rolls on its side.",
+    },
+    "home.viewAll": { ar: "عرض الثمانية كلها", en: "View all eight" },
+    /* --- planets index ---------------------------------------------------- */
+    "planets.title": { ar: "الكواكب الثمانية", en: "The eight planets" },
+    "planets.lede": {
+        ar: "من عطارد المحترق إلى نبتون المتجمّد. اضغط أي كوكب لبياناته الكاملة.",
+        en: "From scorched Mercury to frozen Neptune. Select any planet for its full data.",
+    },
+    /* --- planet detail ---------------------------------------------------- */
+    "detail.back": { ar: "كل الكواكب", en: "All planets" },
+    "detail.order": { ar: "الكوكب {n} من الشمس", en: "Planet {n} from the Sun" },
+    "detail.data": { ar: "البيانات", en: "Data" },
+    "detail.colProperty": { ar: "الخاصية", en: "Property" },
+    "detail.colValue": { ar: "القيمة", en: "Value" },
+    "detail.colUnit": { ar: "الوحدة", en: "Unit" },
+    "detail.tableSummary": {
+        ar: "البيانات الفيزيائية والمدارية لكوكب {name}",
+        en: "Physical and orbital data for {name}",
+    },
+    "detail.tableSource": {
+        ar: "المصدر: صحيفة حقائق الكواكب — ناسا. درجات الحرارة للعمالقة الغازية والجليدية مقيسة عند مستوى ضغط ١ بار، إذ لا سطح لها.",
+        en: "Source: NASA Planetary Fact Sheet. Temperatures for the gas and ice giants are measured at the 1-bar pressure level, as they have no surface.",
+    },
+    "detail.facts": { ar: "أشياء تستحق المعرفة", en: "Worth knowing" },
+    "detail.nav": { ar: "التنقل بين الكواكب", en: "Planet navigation" },
+    "detail.asOf": { ar: "حتى {date}", en: "as of {date}" },
+    "detail.retrograde": { ar: "{v} (تراجعي)", en: "{v} (retrograde)" },
+    /* --- planet card ------------------------------------------------------ */
+    "card.aria": { ar: "{name} — عرض التفاصيل والبيانات", en: "{name} — view details and data" },
+    "card.diameter": { ar: "القطر", en: "Diameter" },
+    "card.moons": { ar: "الأقمار", en: "Moons" },
+    /* --- timeline --------------------------------------------------------- */
+    "timeline.title": { ar: "تاريخ الكون", en: "History of the universe" },
+    "timeline.lede": {
+        ar: "من الانفجار العظيم إلى اليوم — ١٣.٧٨٧ مليار سنة.",
+        en: "From the Big Bang to today — 13.787 billion years.",
+    },
+    "timeline.tMinus": { ar: "منذ الانفجار العظيم", en: "After the Big Bang" },
+    "timeline.yearsAgo": { ar: "قبل الآن", en: "Years ago" },
+    "timeline.theoretical": { ar: "نظري", en: "Theoretical" },
+    /* --- not found -------------------------------------------------------- */
+    "notFound.title": { ar: "لا شيء هنا", en: "Nothing here" },
+    "notFound.body": {
+        ar: "الصفحة التي تبحث عنها خارج المدار.",
+        en: "The page you are looking for is out of orbit.",
+    },
+    "notFound.back": { ar: "العودة إلى الرئيسية", en: "Back to home" },
+    /* --- footer ----------------------------------------------------------- */
+    "footer.sources": {
+        ar: "البيانات الكوكبية من صحيفة حقائق الكواكب — ناسا. أعداد الأقمار من مركز الكواكب الصغيرة التابع للاتحاد الفلكي الدولي.",
+        en: "Planetary data from the NASA Planetary Fact Sheet. Moon counts from the IAU Minor Planet Center.",
+    },
+    /* --- units ------------------------------------------------------------ */
+    "unit.km": { ar: "كم", en: "km" },
+    "unit.kg": { ar: "كجم", en: "kg" },
+    "unit.millionKm": { ar: "مليون كم", en: "million km" },
+    "unit.au": { ar: "و.ف", en: "AU" },
+    "unit.earthDays": { ar: "يوم أرضي", en: "Earth days" },
+    "unit.hours": { ar: "ساعة", en: "hours" },
+    "unit.accel": { ar: "م/ث²", en: "m/s²" },
+    "unit.celsius": { ar: "°م", en: "°C" },
+};
+
+/**
+ * Planetary data.
+ *
+ * Sources: NASA Planetary Fact Sheet (nssdc.gsfc.nasa.gov) for the physical and
+ * orbital figures, which are stable; and the IAU Minor Planet Center for the
+ * moon counts, which are NOT stable — Saturn alone gained 128 confirmed moons in
+ * March 2025 and 11 more in March 2026. `moonsAsOf` records when each count was
+ * last checked so a stale number is visible rather than silently wrong.
+ *
+ * Temperatures are mean surface temperatures, except for the gas and ice giants,
+ * which have no surface — those are quoted at the 1-bar pressure level, the
+ * convention used in the NASA fact sheet.
+ *
+ * Every piece of prose carries both languages side by side. The numbers do not:
+ * they are language-independent, and only their *formatting* changes, which is
+ * handled at render time by the `num` helper from the language context.
+ */
+const PLANETS = [
+    {
+        slug: "mercury",
+        name: { ar: "عطارد", en: "Mercury" },
+        tagline: {
+            ar: "الأقرب للشمس، والأسرع في المدار",
+            en: "Closest to the Sun, and the fastest in orbit",
+        },
+        blurb: {
+            ar: "أصغر كواكب المجموعة وأقربها للشمس. يدور حول الشمس مرة كل ٨٨ يوماً، لكنه يدور حول نفسه ببطء شديد — ثلاث دورات حول محوره لكل دورتين حول الشمس. غياب الغلاف الجوي يجعل الفرق بين وجهه النهاري والليلي من أعنف ما في المجموعة.",
+            en: "The smallest planet and the closest to the Sun. It completes an orbit every 88 days, yet turns on its axis so slowly that it makes exactly three rotations for every two orbits. With almost no atmosphere to move heat around, the gap between its day and night sides is among the most extreme anywhere in the solar system.",
+        },
+        type: { ar: "صخري", en: "Rocky" },
+        color: "#c9c2b6",
+        data: {
+            diameterKm: 4879,
+            massKg: "3.30 × 10²³",
+            distanceMkm: 57.9,
+            distanceAu: 0.387,
+            orbitDays: 88,
+            rotationHours: 1407.6,
+            gravity: 3.7,
+            tempC: 167,
+            moons: 0,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "لا يوجد فعلياً — غلاف خارجي بالغ الرقّة",
+                en: "Effectively none — an extremely thin exosphere",
+            },
+        },
+        facts: {
+            ar: [
+                "الفرق بين درجة الحرارة نهاراً وليلاً يتجاوز ٦٠٠ درجة مئوية.",
+                "رغم قربه من الشمس، ليس الأسخن — الزهرة يسبقه بفارق كبير.",
+                "يحتفظ بجليد مائي في قيعان فوهات قطبية لا تصلها أشعة الشمس أبداً.",
+            ],
+            en: [
+                "Day and night temperatures differ by more than 600 °C.",
+                "Despite being nearest the Sun it is not the hottest — Venus beats it comfortably.",
+                "It holds water ice in the floors of polar craters that sunlight never reaches.",
+            ],
+        },
+    },
+    {
+        slug: "venus",
+        name: { ar: "الزهرة", en: "Venus" },
+        tagline: {
+            ar: "أسخن كوكب في المجموعة",
+            en: "The hottest planet in the solar system",
+        },
+        blurb: {
+            ar: "توأم الأرض في الحجم والكتلة، ونقيضها في كل ما عدا ذلك. غلاف جوي من ثاني أكسيد الكربون يبلغ ضغطه ٩٢ ضعف ضغط الأرض، وأثر بيت زجاجي جامح يرفع حرارة سطحه فوق ٤٦٠ درجة مئوية. يدور حول نفسه بالعكس، وببطء يجعل يومه أطول من سنته.",
+            en: "Earth's twin in size and mass, and its opposite in nearly everything else. A carbon-dioxide atmosphere presses down at 92 times Earth's pressure, and a runaway greenhouse effect holds the surface above 460 °C. It turns backwards, and so slowly that its day outlasts its year.",
+        },
+        type: { ar: "صخري", en: "Rocky" },
+        color: "#ffc65a",
+        data: {
+            diameterKm: 12104,
+            massKg: "4.87 × 10²⁴",
+            distanceMkm: 108.2,
+            distanceAu: 0.723,
+            orbitDays: 224.7,
+            rotationHours: -5832.5,
+            gravity: 8.9,
+            tempC: 464,
+            moons: 0,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "ثاني أكسيد الكربون ٩٦٪ ونيتروجين ٣.٥٪",
+                en: "96% carbon dioxide, 3.5% nitrogen",
+            },
+        },
+        facts: {
+            ar: [
+                "يومه (٢٤٣ يوماً أرضياً) أطول من سنته (٢٢٥ يوماً).",
+                "يدور حول محوره في الاتجاه المعاكس لمعظم الكواكب.",
+                "ضغط سطحه يعادل الضغط على عمق ٩٠٠ متر تحت سطح المحيط.",
+            ],
+            en: [
+                "Its day (243 Earth days) is longer than its year (225 days).",
+                "It rotates in the opposite direction to most of the planets.",
+                "Surface pressure matches being 900 metres deep in Earth's ocean.",
+            ],
+        },
+    },
+    {
+        slug: "earth",
+        name: { ar: "الأرض", en: "Earth" },
+        tagline: {
+            ar: "العالم الوحيد المعروف بوجود حياة عليه",
+            en: "The only world known to carry life",
+        },
+        blurb: {
+            ar: "الكوكب الثالث، والوحيد الذي يوجد فيه ماء سائل مستقر على السطح. غلافه الجوي الغني بالأكسجين ومجاله المغناطيسي يحميان سطحه من الإشعاع الشمسي. سطحه نشط تكتونياً، وهو ما يعيد تدوير الكربون ويبقي المناخ ضمن نطاق صالح للحياة على مدى جيولوجي.",
+            en: "The third planet, and the only one with stable liquid water on its surface. An oxygen-rich atmosphere and a magnetic field together shield the ground from solar radiation. Its crust is tectonically active, which recycles carbon and has kept the climate within a habitable range over geological time.",
+        },
+        type: { ar: "صخري", en: "Rocky" },
+        color: "#5fd8ff",
+        data: {
+            diameterKm: 12756,
+            massKg: "5.97 × 10²⁴",
+            distanceMkm: 149.6,
+            distanceAu: 1.0,
+            orbitDays: 365.2,
+            rotationHours: 23.9,
+            gravity: 9.8,
+            tempC: 15,
+            moons: 1,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "نيتروجين ٧٨٪ وأكسجين ٢١٪",
+                en: "78% nitrogen, 21% oxygen",
+            },
+        },
+        facts: {
+            ar: [
+                "٧١٪ من سطحه مغطى بالماء، لكن الماء لا يشكّل سوى ٠.٠٢٪ من كتلته.",
+                "القمر يبتعد عنها نحو ٣.٨ سنتيمتر كل سنة.",
+                "مجالها المغناطيسي ينشأ من دوران لبّها الخارجي المنصهر.",
+            ],
+            en: [
+                "Water covers 71% of the surface but makes up only 0.02% of the mass.",
+                "The Moon drifts about 3.8 centimetres further away each year.",
+                "Its magnetic field is generated by the churning of a molten outer core.",
+            ],
+        },
+    },
+    {
+        slug: "mars",
+        name: { ar: "المريخ", en: "Mars" },
+        tagline: {
+            ar: "الكوكب الأحمر، وأكثر الوجهات دراسةً",
+            en: "The red planet, and the most studied destination",
+        },
+        blurb: {
+            ar: "كوكب صخري بارد وجاف، يكتسب لونه من أكسيد الحديد في تربته. يحمل أعلى بركان في المجموعة الشمسية (أوليمبوس مونس) وأحد أطول الأودية (فاليس مارينيريس). تشير تضاريسه إلى أن الماء السائل جرى على سطحه في الماضي البعيد.",
+            en: "A cold, dry rocky world that takes its colour from iron oxide in the soil. It carries the tallest volcano in the solar system, Olympus Mons, and one of its longest canyon systems, Valles Marineris. The landforms record liquid water running across the surface in the distant past.",
+        },
+        type: { ar: "صخري", en: "Rocky" },
+        color: "#ff4a32",
+        data: {
+            diameterKm: 6792,
+            massKg: "6.42 × 10²³",
+            distanceMkm: 227.9,
+            distanceAu: 1.524,
+            orbitDays: 687,
+            rotationHours: 24.6,
+            gravity: 3.7,
+            tempC: -65,
+            moons: 2,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "ثاني أكسيد الكربون ٩٥٪ — رقيق جداً",
+                en: "95% carbon dioxide — extremely thin",
+            },
+        },
+        facts: {
+            ar: [
+                "أوليمبوس مونس يرتفع ٢٢ كيلومتراً، أي نحو ٢.٥ ضعف ارتفاع إيفرست.",
+                "يومه يقارب يوم الأرض: ٢٤ ساعة و٣٧ دقيقة.",
+                "قمراه فوبوس وديموس صغيران وغير كرويين، ويُرجَّح أنهما كويكبان أُسِرا.",
+            ],
+            en: [
+                "Olympus Mons rises 22 kilometres — roughly 2.5 times the height of Everest.",
+                "Its day is close to Earth's: 24 hours and 37 minutes.",
+                "Its moons Phobos and Deimos are small and lumpy, most likely captured asteroids.",
+            ],
+        },
+    },
+    {
+        slug: "jupiter",
+        name: { ar: "المشتري", en: "Jupiter" },
+        tagline: {
+            ar: "الأضخم — أثقل من كل الكواكب مجتمعة",
+            en: "The largest — heavier than every other planet combined",
+        },
+        blurb: {
+            ar: "عملاق غازي تفوق كتلته كتلة بقية كواكب المجموعة مجتمعة بمرتين ونصف. لا سطح صلب له؛ الغلاف الغازي يتكثّف تدريجياً حتى يصير هيدروجيناً معدنياً سائلاً. جاذبيته الهائلة تحرف المذنّبات وتؤثر في بنية المجموعة كلها.",
+            en: "A gas giant with two and a half times the mass of every other planet put together. It has no solid surface; the atmosphere simply thickens with depth until it becomes liquid metallic hydrogen. Its gravity deflects comets and has shaped the architecture of the whole solar system.",
+        },
+        type: { ar: "عملاق غازي", en: "Gas giant" },
+        color: "#ffa62e",
+        data: {
+            diameterKm: 142984,
+            massKg: "1.898 × 10²⁷",
+            distanceMkm: 778.5,
+            distanceAu: 5.203,
+            orbitDays: 4331,
+            rotationHours: 9.9,
+            gravity: 23.1,
+            tempC: -110,
+            moons: 101,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "هيدروجين ٩٠٪ وهيليوم ١٠٪",
+                en: "90% hydrogen, 10% helium",
+            },
+        },
+        facts: {
+            ar: [
+                "البقعة الحمراء العظيمة عاصفة أكبر من الأرض، تُرصد منذ أكثر من ٣٥٠ سنة.",
+                "أسرع الكواكب دوراناً: يكمل دورة حول محوره في أقل من ١٠ ساعات.",
+                "قمره جانيميد أكبر من عطارد، وهو أكبر قمر في المجموعة الشمسية.",
+            ],
+            en: [
+                "The Great Red Spot is a storm wider than Earth, watched for over 350 years.",
+                "It is the fastest-spinning planet, turning once in under 10 hours.",
+                "Its moon Ganymede is larger than Mercury and the biggest moon in the solar system.",
+            ],
+        },
+    },
+    {
+        slug: "saturn",
+        name: { ar: "زحل", en: "Saturn" },
+        tagline: {
+            ar: "صاحب أشهر نظام حلقات",
+            en: "Keeper of the most famous ring system",
+        },
+        blurb: {
+            ar: "ثاني أكبر الكواكب، وأقلها كثافة — كثافته أقل من كثافة الماء. حلقاته تتكوّن أساساً من قطع جليد مائي يتراوح حجمها بين حبّات الغبار والبيوت، وهي رقيقة إلى حد مذهل: سمكها عشرات الأمتار مقابل امتداد يبلغ مئات الآلاف من الكيلومترات.",
+            en: "The second-largest planet and the least dense — less dense, in fact, than water. Its rings are mostly chunks of water ice ranging from grains of dust to houses, and they are astonishingly thin: tens of metres thick across a span of hundreds of thousands of kilometres.",
+        },
+        type: { ar: "عملاق غازي", en: "Gas giant" },
+        color: "#ffd884",
+        data: {
+            diameterKm: 120536,
+            massKg: "5.68 × 10²⁶",
+            distanceMkm: 1432,
+            distanceAu: 9.537,
+            orbitDays: 10747,
+            rotationHours: 10.7,
+            gravity: 9.0,
+            tempC: -140,
+            moons: 285,
+            moonsAsOf: { ar: "مارس ٢٠٢٦", en: "March 2026" },
+            atmosphere: {
+                ar: "هيدروجين ٩٦٪ وهيليوم ٣٪",
+                en: "96% hydrogen, 3% helium",
+            },
+        },
+        facts: {
+            ar: [
+                "كثافته أقل من كثافة الماء — نظرياً يطفو لو وُجد حوض يسعه.",
+                "عدد أقماره المؤكدة قفز من ١٤٦ إلى ٢٧٤ في إعلان واحد في مارس ٢٠٢٥.",
+                "قمره تيتان له غلاف جوي كثيف وبحيرات ميثان سائل على سطحه.",
+            ],
+            en: [
+                "It is less dense than water — in principle it would float, given a big enough bath.",
+                "Its confirmed moon count jumped from 146 to 274 in a single announcement in March 2025.",
+                "Its moon Titan has a thick atmosphere and lakes of liquid methane on its surface.",
+            ],
+        },
+    },
+    {
+        slug: "uranus",
+        name: { ar: "أورانوس", en: "Uranus" },
+        tagline: {
+            ar: "الكوكب الذي يتدحرج على جنبه",
+            en: "The planet that rolls on its side",
+        },
+        blurb: {
+            ar: "عملاق جليدي يميل محوره بمقدار ٩٨ درجة تقريباً، أي أنه يدور مضطجعاً على جانبه — وهو ما يُرجَّح أنه أثر اصطدام هائل في تاريخه المبكر. هذا الميل يمنحه أشد الفصول تطرفاً في المجموعة: كل قطب يقضي ٤٢ سنة في ضوء متصل ثم ٤٢ سنة في ظلام.",
+            en: "An ice giant tipped about 98 degrees over, so that it effectively spins lying down — most likely the mark of an enormous collision early in its history. That tilt gives it the most extreme seasons anywhere: each pole spends 42 years in continuous daylight, then 42 in darkness.",
+        },
+        type: { ar: "عملاق جليدي", en: "Ice giant" },
+        color: "#7fe6ff",
+        data: {
+            diameterKm: 51118,
+            massKg: "8.68 × 10²⁵",
+            distanceMkm: 2867,
+            distanceAu: 19.191,
+            orbitDays: 30589,
+            rotationHours: -17.2,
+            gravity: 8.7,
+            tempC: -195,
+            moons: 28,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "هيدروجين ٨٣٪ وهيليوم ١٥٪ وميثان ٢٪",
+                en: "83% hydrogen, 15% helium, 2% methane",
+            },
+        },
+        facts: {
+            ar: [
+                "ميل محوره ٩٨ درجة — يدور فعلياً على جانبه.",
+                "أبرد غلاف جوي مُقاس في المجموعة الشمسية: −٢٢٤ درجة مئوية.",
+                "الميثان في غلافه يمتص الضوء الأحمر، فيبدو الكوكب أزرق مخضرّاً.",
+            ],
+            en: [
+                "Its axial tilt is 98 degrees — it genuinely rotates on its side.",
+                "It holds the coldest atmosphere ever measured in the solar system: −224 °C.",
+                "Methane in its air absorbs red light, which is why the planet looks blue-green.",
+            ],
+        },
+    },
+    {
+        slug: "neptune",
+        name: { ar: "نبتون", en: "Neptune" },
+        tagline: {
+            ar: "الأبعد، وموطن أعنف الرياح",
+            en: "The furthest out, and home to the fiercest winds",
+        },
+        blurb: {
+            ar: "أبعد كواكب المجموعة عن الشمس، واكتُشف بالحساب الرياضي قبل أن يُرصد بالتلسكوب — إذ دلّت اضطرابات مدار أورانوس على وجوده. تهبّ في غلافه أسرع رياح مرصودة في المجموعة الشمسية، وتتجاوز ٢٠٠٠ كيلومتر في الساعة.",
+            en: "The most distant planet from the Sun, and the only one found by mathematics before anyone saw it — irregularities in the orbit of Uranus gave it away. Its atmosphere carries the fastest winds measured anywhere in the solar system, exceeding 2,000 kilometres per hour.",
+        },
+        type: { ar: "عملاق جليدي", en: "Ice giant" },
+        color: "#3f7dff",
+        data: {
+            diameterKm: 49528,
+            massKg: "1.02 × 10²⁶",
+            distanceMkm: 4515,
+            distanceAu: 30.069,
+            orbitDays: 59800,
+            rotationHours: 16.1,
+            gravity: 11.0,
+            tempC: -200,
+            moons: 16,
+            moonsAsOf: { ar: "٢٠٢٦", en: "2026" },
+            atmosphere: {
+                ar: "هيدروجين ٨٠٪ وهيليوم ١٩٪ وميثان ١.٥٪",
+                en: "80% hydrogen, 19% helium, 1.5% methane",
+            },
+        },
+        facts: {
+            ar: [
+                "اكتُشف عام ١٨٤٦ بالحساب قبل الرصد، اعتماداً على شذوذ مدار أورانوس.",
+                "أكمل أول دورة كاملة حول الشمس منذ اكتشافه في عام ٢٠١١.",
+                "قمره تريتون يدور عكس اتجاه دوران الكوكب، ويُرجَّح أنه جُرم مأسور من حزام كايبر.",
+            ],
+            en: [
+                "Discovered in 1846 by calculation rather than observation, from anomalies in Uranus's orbit.",
+                "It finished its first full orbit since discovery only in 2011.",
+                "Its moon Triton orbits backwards, and is probably a captured Kuiper Belt object.",
+            ],
+        },
+    },
+];
+function getPlanet(slug) {
+    return PLANETS.find((p) => p.slug === slug);
+}
+/**
+ * Rendering parameters for <Planet />, kept apart from the factual data above
+ * so the two are not confused: `spinSeconds` is a look, not a measurement.
+ *
+ * `tilt` IS real — axial tilt in degrees, from the same NASA fact sheet. Venus
+ * at 177° and Uranus at 98° are why those two also spin retrograde: their poles
+ * are flipped past the horizontal.
+ */
+const RENDER = {
+    mercury: { kind: "mercury", tilt: 0.03, spinSeconds: 60 },
+    venus: { kind: "venus", tilt: 177.4, spinSeconds: 90, retrograde: true },
+    earth: { kind: "earth", tilt: 23.4, spinSeconds: 26 },
+    mars: { kind: "mars", tilt: 25.2, spinSeconds: 27 },
+    jupiter: { kind: "jupiter", tilt: 3.1, spinSeconds: 14 },
+    saturn: { kind: "saturn", tilt: 26.7, spinSeconds: 16, rings: true },
+    uranus: { kind: "uranus", tilt: 97.8, spinSeconds: 22, retrograde: true },
+    neptune: { kind: "neptune", tilt: 28.3, spinSeconds: 20 },
+};
+/**
+ * Rows of the detail table, kept beside the data so the two never drift. The
+ * label and unit are UI string keys rather than literals, so the table speaks
+ * whichever language is active.
+ */
+const DATA_LABELS = [
+    { key: "diameterKm", label: { ar: "القطر الاستوائي", en: "Equatorial diameter" }, unitKey: "unit.km" },
+    { key: "massKg", label: { ar: "الكتلة", en: "Mass" }, unitKey: "unit.kg" },
+    { key: "distanceMkm", label: { ar: "متوسط البعد عن الشمس", en: "Mean distance from the Sun" }, unitKey: "unit.millionKm" },
+    { key: "distanceAu", label: { ar: "البعد بالوحدات الفلكية", en: "Distance in astronomical units" }, unitKey: "unit.au" },
+    { key: "orbitDays", label: { ar: "مدة الدورة حول الشمس", en: "Orbital period" }, unitKey: "unit.earthDays" },
+    { key: "rotationHours", label: { ar: "مدة الدورة حول المحور", en: "Rotation period" }, unitKey: "unit.hours" },
+    { key: "gravity", label: { ar: "جاذبية السطح", en: "Surface gravity" }, unitKey: "unit.accel" },
+    { key: "tempC", label: { ar: "متوسط الحرارة", en: "Mean temperature" }, unitKey: "unit.celsius" },
+    { key: "moons", label: { ar: "عدد الأقمار المؤكدة", en: "Confirmed moons" } },
+    { key: "atmosphere", label: { ar: "الغلاف الجوي", en: "Atmosphere" } },
+];
+
+/**
+ * History of the universe, Big Bang → today.
+ *
+ * Ages follow the Planck 2018 cosmology (universe age 13.787 ± 0.020 billion
+ * years) and the standard ΛCDM chronology. `tMinus` is time since the Big Bang;
+ * `yearsAgo` is the same moment counted backwards from now, which is the axis
+ * most people actually read a cosmic timeline on.
+ *
+ * The two earliest entries are theoretical: no observation reaches past the
+ * cosmic microwave background at ~380,000 years, so everything before that is
+ * inference from particle physics rather than something anyone has seen.
+ */
+const ERAS = [
+    {
+        id: "planck",
+        tMinus: { ar: "٠ — ١٠⁻⁴³ ثانية", en: "0 — 10⁻⁴³ seconds" },
+        yearsAgo: { ar: "١٣.٨ مليار سنة", en: "13.8 billion years" },
+        title: { ar: "زمن بلانك", en: "The Planck epoch" },
+        body: {
+            ar: "أبكر لحظة تصلها الفيزياء المعروفة. الجاذبية والقوى الأخرى موحّدة على الأرجح في قوة واحدة، والنسبية العامة وميكانيكا الكم تتوقفان معاً عن إعطاء إجابات. ما قبل ذلك ليس مجهولاً فحسب، بل خارج نطاق ما تستطيع نظرياتنا الحالية وصفه.",
+            en: "The earliest moment known physics can reach. Gravity and the other forces are probably unified into one, and general relativity and quantum mechanics both stop returning answers. What came before is not merely unknown — it is outside what our current theories are able to describe.",
+        },
+        color: "#a78bfa",
+        theoretical: true,
+    },
+    {
+        id: "inflation",
+        tMinus: { ar: "١٠⁻³⁶ — ١٠⁻³² ثانية", en: "10⁻³⁶ — 10⁻³² seconds" },
+        yearsAgo: { ar: "١٣.٨ مليار سنة", en: "13.8 billion years" },
+        title: { ar: "التضخم الكوني", en: "Cosmic inflation" },
+        body: {
+            ar: "يتمدد الكون بمعامل لا يقل عن ١٠²⁶ في جزء ضئيل من الثانية. هذا ما يفسّر لماذا يبدو الكون متجانساً ومسطّحاً على النطاقات الكبرى، ولماذا تتطابق حرارة منطقتين متقابلتين لم يكن بينهما اتصال ممكن.",
+            en: "The universe expands by a factor of at least 10²⁶ in a small fraction of a second. This is what explains why it looks so uniform and so flat on large scales, and why two opposite patches of sky that could never have exchanged a signal are nonetheless the same temperature.",
+        },
+        color: "#a78bfa",
+        theoretical: true,
+    },
+    {
+        id: "quark-soup",
+        tMinus: { ar: "١٠⁻¹² — ١٠⁻⁶ ثانية", en: "10⁻¹² — 10⁻⁶ seconds" },
+        yearsAgo: { ar: "١٣.٨ مليار سنة", en: "13.8 billion years" },
+        title: { ar: "حساء الكواركات", en: "The quark soup" },
+        body: {
+            ar: "تنفصل القوى الأساسية بعضها عن بعض. الكون بلازما من الكواركات والغلوونات، أسخن من أن تترابط في جسيمات. مع هبوط الحرارة تتجمّع الكواركات ثلاثة ثلاثة لتكوّن البروتونات والنيوترونات.",
+            en: "The fundamental forces separate from one another. The universe is a plasma of quarks and gluons, far too hot for them to bind into particles. As it cools, quarks lock together in threes to form protons and neutrons.",
+        },
+        color: "#7c3aed",
+        theoretical: true,
+    },
+    {
+        id: "nucleosynthesis",
+        tMinus: { ar: "١٠ ثوانٍ — ٢٠ دقيقة", en: "10 seconds — 20 minutes" },
+        yearsAgo: { ar: "١٣.٨ مليار سنة", en: "13.8 billion years" },
+        title: { ar: "التخليق النووي البدائي", en: "Big Bang nucleosynthesis" },
+        body: {
+            ar: "تندمج البروتونات والنيوترونات فتتكوّن نوى الهيدروجين والهيليوم وأثر من الليثيوم. النسبة الناتجة — نحو ٧٥٪ هيدروجين و٢٥٪ هيليوم بالكتلة — ما زالت مقيسة في الكون اليوم، وهي من أقوى الأدلة على النموذج كله.",
+            en: "Protons and neutrons fuse into hydrogen and helium nuclei, plus a trace of lithium. The resulting ratio — roughly 75% hydrogen to 25% helium by mass — is still what we measure in the universe today, and is among the strongest pieces of evidence for the whole model.",
+        },
+        color: "#7c3aed",
+    },
+    {
+        id: "cmb",
+        tMinus: { ar: "٣٨٠ ألف سنة", en: "380,000 years" },
+        yearsAgo: { ar: "١٣.٨ مليار سنة", en: "13.8 billion years" },
+        title: { ar: "الانفصال — أول ضوء", en: "Recombination — first light" },
+        body: {
+            ar: "تبرد الحرارة إلى نحو ٣٠٠٠ كلفن، فتلتقط النوى إلكتروناتها وتتكوّن الذرات المتعادلة. يصير الكون شفافاً للضوء لأول مرة، والفوتونات المنطلقة في تلك اللحظة هي إشعاع الخلفية الكونية الميكروي الذي نرصده اليوم: أقدم صورة يمكن التقاطها للكون.",
+            en: "Temperatures fall to about 3,000 K, nuclei capture their electrons, and neutral atoms form. The universe becomes transparent to light for the first time, and the photons released at that instant are the cosmic microwave background we observe today: the oldest picture of the universe it is possible to take.",
+        },
+        color: "#5fd8ff",
+    },
+    {
+        id: "dark-ages",
+        tMinus: { ar: "٣٨٠ ألف — ١٥٠ مليون سنة", en: "380,000 — 150 million years" },
+        yearsAgo: { ar: "١٣.٦ مليار سنة", en: "13.6 billion years" },
+        title: { ar: "العصور المظلمة", en: "The dark ages" },
+        body: {
+            ar: "لا نجوم بعد. غاز محايد بارد ينتشر في الفراغ، والجاذبية تشتغل ببطء على تكتيل المادة المظلمة في هالات ستصير لاحقاً مهاداً للمجرات.",
+            en: "No stars yet. Cold neutral gas fills the void while gravity works slowly, gathering dark matter into haloes that will later cradle the first galaxies.",
+        },
+        color: "#4338ca",
+    },
+    {
+        id: "first-stars",
+        tMinus: { ar: "١٠٠ — ٤٠٠ مليون سنة", en: "100 — 400 million years" },
+        yearsAgo: { ar: "١٣.٥ مليار سنة", en: "13.5 billion years" },
+        title: { ar: "النجوم الأولى", en: "The first stars" },
+        body: {
+            ar: "تشتعل نجوم الجيل الثالث — ضخمة، قصيرة العمر، خالية من العناصر الثقيلة. إشعاعها يعيد تأيين الغاز المحيط، وموتها في مستعرات عظمى يبذر الكون بأول كربون وأكسجين وحديد. تلسكوب جيمس ويب يرصد اليوم مجرات من هذه الحقبة.",
+            en: "Population III stars ignite — massive, short-lived, and containing no heavy elements at all. Their radiation reionises the surrounding gas, and their deaths as supernovae seed the universe with its first carbon, oxygen and iron. The James Webb telescope is now observing galaxies from this era.",
+        },
+        color: "#5fd8ff",
+    },
+    {
+        id: "milky-way",
+        tMinus: { ar: "١ — ٢ مليار سنة", en: "1 — 2 billion years" },
+        yearsAgo: { ar: "نحو ١٢ مليار سنة", en: "about 12 billion years" },
+        title: { ar: "تكوّن درب التبانة", en: "The Milky Way forms" },
+        body: {
+            ar: "تتجمّع مجرتنا من اندماج تجمعات أصغر. أقدم نجومها المعروفة يقارب عمرها عمر الكون نفسه، ولا تزال في الهالة المحيطة بالقرص.",
+            en: "Our galaxy assembles from the merging of smaller clumps. Its oldest known stars are nearly as old as the universe itself, and still sit in the halo surrounding the disc.",
+        },
+        color: "#a78bfa",
+    },
+    {
+        id: "solar-system",
+        tMinus: { ar: "٩.٢ مليار سنة", en: "9.2 billion years" },
+        yearsAgo: { ar: "٤.٦ مليار سنة", en: "4.6 billion years" },
+        title: { ar: "ولادة المجموعة الشمسية", en: "The solar system is born" },
+        body: {
+            ar: "تنهار سحابة جزيئية على نفسها، فتتكوّن الشمس في مركزها ويتسطّح ما تبقّى في قرص كوكبي. تتلاحم الحبيبات في كويكبات ثم في كواكب. الأرض تكتمل خلال نحو ١٠٠ مليون سنة.",
+            en: "A molecular cloud collapses in on itself, forming the Sun at its centre while the remainder flattens into a planet-forming disc. Grains stick into asteroids, and asteroids into planets. Earth finishes assembling within roughly 100 million years.",
+        },
+        color: "#ffd884",
+    },
+    {
+        id: "life",
+        tMinus: { ar: "١٠ مليارات سنة", en: "10 billion years" },
+        yearsAgo: { ar: "٣.٨ مليار سنة", en: "3.8 billion years" },
+        title: { ar: "أول أثر للحياة", en: "The first trace of life" },
+        body: {
+            ar: "أقدم الأدلة الجيوكيميائية والحفرية على حياة ميكروبية على الأرض. البكتيريا الزرقاء تبدأ لاحقاً في إنتاج الأكسجين بالتمثيل الضوئي، فتغيّر تركيب الغلاف الجوي تغييراً جذرياً فيما يُعرف بحدث الأكسدة الكبير قبل ٢.٤ مليار سنة.",
+            en: "The oldest geochemical and fossil evidence for microbial life on Earth. Cyanobacteria later begin producing oxygen by photosynthesis, transforming the composition of the atmosphere in what is known as the Great Oxidation Event, 2.4 billion years ago.",
+        },
+        color: "#5fd8ff",
+    },
+    {
+        id: "humans",
+        tMinus: { ar: "١٣.٧٨٧ مليار سنة", en: "13.787 billion years" },
+        yearsAgo: { ar: "٣٠٠ ألف سنة", en: "300,000 years" },
+        title: { ar: "الإنسان العاقل", en: "Homo sapiens" },
+        body: {
+            ar: "يظهر نوعنا في أفريقيا. على مقياس هذا الخط الزمني، لو اختُصر عمر الكون في سنة واحدة، لظهر الإنسان في آخر ثماني دقائق من ليلة رأس السنة.",
+            en: "Our species appears in Africa. On the scale of this timeline, if the age of the universe were compressed into a single year, humans would show up in the last eight minutes of New Year's Eve.",
+        },
+        color: "#f8fafc",
+    },
+    {
+        id: "now",
+        tMinus: { ar: "١٣.٧٨٧ مليار سنة", en: "13.787 billion years" },
+        yearsAgo: { ar: "اليوم", en: "today" },
+        title: { ar: "اللحظة الحالية", en: "The present moment" },
+        body: {
+            ar: "الكون ما زال يتمدد، وبمعدل متسارع تدفعه الطاقة المظلمة. الضوء الذي يصلنا من أبعد المجرات المرصودة قطع أكثر من ١٣ مليار سنة قبل أن يبلغ مرايا تلسكوباتنا.",
+            en: "The universe is still expanding, and at an accelerating rate driven by dark energy. Light reaching us from the most distant observed galaxies has travelled for more than 13 billion years before landing on our telescope mirrors.",
+        },
+        color: "#f8fafc",
+    },
+];
+
+/* >>> end content <<< */
+
+/* >>> generated: planet-texture <<< */
+/* Generated from src/lib/planet-texture.ts — do not edit here. */
+/* ============================================================================
+ * Planet surface generation.
+ *
+ * Every surface here is written in code from real astronomical data — real
+ * coastlines, real named albedo features at their real coordinates, real
+ * cloud-band latitudes. Nothing is downloaded, so nothing can fail to load,
+ * and each body is built by its own function rather than by tinting one
+ * generic "rocky/gas/ice" recipe. That is the whole point: Mercury is
+ * cratered because Mercury is cratered, Venus is a smooth cloud deck because
+ * that is what you actually see, and Uranus is bland because Uranus is bland.
+ *
+ * Shared by the React component (src/components/Planet.tsx) and by the
+ * no-build preview page — preview.html embeds a transpiled copy of this file,
+ * so the two can never drift apart.
+ * ==========================================================================*/
+/** Equirectangular working size: longitude across, latitude down. */
+const TW = 512;
+const TH = 256;
+const mix = (a, b, t) => a + (b - a) * t;
+const smooth = (t) => t * t * (3 - 2 * t);
+const clamp01 = (t) => (t < 0 ? 0 : t > 1 ? 1 : t);
+function hexToRgb(hex) {
+    const h = hex.replace("#", "");
+    const f = h.length === 3 ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h.slice(0, 6);
+    const n = parseInt(f, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+/* --- deterministic noise -------------------------------------------------- */
+function mulberry32(seed) {
+    let t = seed >>> 0;
+    return () => {
+        t += 0x6d2b79f5;
+        let x = t;
+        x = Math.imul(x ^ (x >>> 15), x | 1);
+        x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+        return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+}
+/** Value noise on a grid that wraps in x, so the map's edges meet seamlessly. */
+function makeNoise(w, h, seed) {
+    const rnd = mulberry32(seed);
+    const g = new Float32Array(w * h);
+    for (let i = 0; i < g.length; i++)
+        g[i] = rnd();
+    return (x, y) => {
+        const xi = Math.floor(x), yi = Math.floor(y);
+        const xf = x - xi, yf = y - yi;
+        const sx = smooth(xf), sy = smooth(yf);
+        const x0 = ((xi % w) + w) % w, x1 = (x0 + 1) % w;
+        const y0 = Math.min(h - 1, Math.max(0, yi)), y1 = Math.min(h - 1, y0 + 1);
+        const a = g[y0 * w + x0], b = g[y0 * w + x1];
+        const c = g[y1 * w + x0], d = g[y1 * w + x1];
+        return (a + (b - a) * sx) * (1 - sy) + (c + (d - c) * sx) * sy;
+    };
+}
+/**
+ * Fractal noise taking (u, v) in [0,1] — u is longitude, v is latitude. Every
+ * octave wraps over exactly one full turn of longitude, so there is never a
+ * seam at the date line. A wide, short grid (w >> h) stretches the result
+ * along longitude, which is what makes gas-giant turbulence shear into belts
+ * instead of looking like static.
+ */
+function makeFbm(w, h, seed, octaves) {
+    const layers = [];
+    for (let o = 0; o < octaves; o++)
+        layers.push(makeNoise(w << o, h << o, seed + o * 7919));
+    return (u, v) => {
+        let sum = 0, amp = 1, tot = 0;
+        for (let o = 0; o < octaves; o++) {
+            sum += layers[o](u * (w << o), v * (h << o)) * amp;
+            tot += amp;
+            amp *= 0.5;
+        }
+        return sum / tot;
+    };
+}
+/* --- feature placement ---------------------------------------------------- */
+/**
+ * Smooth falloff from 1 at (cLon, cLat) to 0 at the edge of an ellipse, in
+ * degrees. This is how every named feature below is placed: give it the real
+ * coordinates from the literature and it lands where it belongs.
+ */
+function feature(lonDeg, latDeg, cLon, cLat, lonR, latR) {
+    let dLon = lonDeg - cLon;
+    dLon = ((dLon + 540) % 360) - 180;
+    const d = Math.sqrt((dLon / lonR) ** 2 + ((latDeg - cLat) / latR) ** 2);
+    return d >= 1 ? 0 : smooth(1 - d);
+}
+/** Piecewise latitude→colour ramp, smoothstepped so belts blend like cloud. */
+function bandColor(latDeg, stops, out) {
+    if (latDeg <= stops[0][0]) {
+        out[0] = stops[0][1][0];
+        out[1] = stops[0][1][1];
+        out[2] = stops[0][1][2];
+        return;
+    }
+    for (let i = 1; i < stops.length; i++) {
+        if (latDeg <= stops[i][0]) {
+            const [l0, c0] = stops[i - 1];
+            const [l1, c1] = stops[i];
+            const s = smooth((latDeg - l0) / (l1 - l0));
+            out[0] = mix(c0[0], c1[0], s);
+            out[1] = mix(c0[1], c1[1], s);
+            out[2] = mix(c0[2], c1[2], s);
+            return;
+        }
+    }
+    const last = stops[stops.length - 1][1];
+    out[0] = last[0];
+    out[1] = last[1];
+    out[2] = last[2];
+}
+/**
+ * Flattens each polar row toward its own average colour.
+ *
+ * Every equirectangular map crowds all 360° of longitude onto a handful of
+ * pixels at the poles. Sampled onto a sphere that becomes a radial starburst.
+ * Averaging the row kills the variation causing it while keeping the row's
+ * real colour, so ice caps stay white and Jupiter's poles stay brown.
+ */
+function flattenPoles(tex) {
+    for (let y = 0; y < TH; y++) {
+        const lat = y / TH;
+        const w = Math.min(1, Math.pow(Math.abs(lat - 0.5) * 2, 2.2) * 1.2);
+        if (w <= 0.001)
+            continue;
+        let ar = 0, ag = 0, ab = 0;
+        for (let x = 0; x < TW; x++) {
+            const i = (y * TW + x) * 3;
+            ar += tex[i];
+            ag += tex[i + 1];
+            ab += tex[i + 2];
+        }
+        ar /= TW;
+        ag /= TW;
+        ab /= TW;
+        for (let x = 0; x < TW; x++) {
+            const i = (y * TW + x) * 3;
+            tex[i] = mix(tex[i], ar, w);
+            tex[i + 1] = mix(tex[i + 1], ag, w);
+            tex[i + 2] = mix(tex[i + 2], ab, w);
+        }
+    }
+}
+/** Craters spread evenly over the sphere, biased small like a real population. */
+function craterField(seed, count) {
+    const rnd = mulberry32(seed);
+    const out = [];
+    for (let i = 0; i < count; i++) {
+        // asin() of a uniform value gives equal area per crater, so they do not
+        // bunch up at the poles the way a naive uniform latitude would.
+        const lat = (Math.asin(rnd() * 2 - 1) * 180) / Math.PI;
+        const lon = rnd() * 360 - 180;
+        // Small craters vastly outnumber large ones on any real cratered surface,
+        // and a crowd of small ones is what reads as "battered" — a handful of big
+        // ones just reads as circles drawn on a ball.
+        const r = 1.5 + Math.pow(rnd(), 2.8) * 12;
+        out.push({ lon, lat, r, depth: 0.45 + rnd() * 0.55 });
+    }
+    return out;
+}
+/** Stamps bright rims and dark floors into a relief buffer. */
+function stampCraters(relief, craters) {
+    for (const c of craters) {
+        const latR = c.r;
+        // A crater keeps its angular size, but degrees of longitude get narrower
+        // toward the poles, so its footprint on the map has to widen to match.
+        const lonR = c.r / Math.max(0.16, Math.cos((c.lat * Math.PI) / 180));
+        const y0 = Math.max(0, Math.floor(((90 - (c.lat + latR)) / 180) * TH));
+        const y1 = Math.min(TH - 1, Math.ceil(((90 - (c.lat - latR)) / 180) * TH));
+        for (let y = y0; y <= y1; y++) {
+            const latDeg = 90 - ((y + 0.5) / TH) * 180;
+            const dLat = (latDeg - c.lat) / latR;
+            if (Math.abs(dLat) >= 1)
+                continue;
+            for (let x = 0; x < TW; x++) {
+                const lonDeg = ((x + 0.5) / TW) * 360 - 180;
+                let dLon = lonDeg - c.lon;
+                dLon = ((dLon + 540) % 360) - 180;
+                const d = Math.sqrt((dLon / lonR) ** 2 + dLat * dLat);
+                if (d >= 1.05)
+                    continue;
+                // A raised rim just inside the edge, a sunken floor in the middle —
+                // both kept gentle. Pushed harder they stop looking like topography
+                // and start looking like rings stencilled onto the surface.
+                // Weighted heavily toward the sunken floor. A symmetric bright rim is
+                // the thing that makes procedural craters read as stencilled rings —
+                // real ones are read mostly as dark pits at this scale.
+                const rim = Math.exp(-(((d - 0.82) / 0.22) ** 2));
+                const floor = d < 0.74 ? 1 - (d / 0.74) ** 2 : 0;
+                relief[y * TW + x] += rim * 0.08 * c.depth - floor * 0.34 * c.depth;
+            }
+        }
+    }
+}
+function buildMercury(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const dust = makeFbm(18, 9, seed, 4);
+    const relief = new Float32Array(TW * TH);
+    stampCraters(relief, craterField(seed + 13, 300));
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const lonDeg = u * 360 - 180;
+            const i = (y * TW + x) * 3;
+            let s = 0.54 + (dust(u, v) - 0.5) * 0.3;
+            // Caloris Planitia, 30.5°N 189.8°E — 1,550 km across, one of the largest
+            // impact basins in the solar system, and smoother and paler than the
+            // cratered terrain it punched through.
+            const caloris = feature(lonDeg, latDeg, -170.2, 30.5, 24, 20);
+            s = mix(s, 0.74, caloris * 0.85);
+            // Bright ray systems from two young craters: Kuiper (11.3°S, 31.2°W)
+            // and Debussy (34.2°S, 12.6°E).
+            s += feature(lonDeg, latDeg, -31.2, -11.3, 26, 22) * 0.12;
+            s += feature(lonDeg, latDeg, 12.6, -34.2, 24, 20) * 0.1;
+            // Craters fade inside Caloris, whose floor was resurfaced by lava.
+            s += relief[y * TW + x] * (1 - caloris * 0.75);
+            s = clamp01(s * 0.92 + 0.04) * 1.18;
+            // Genuinely grey, with only a faint warm cast — Mercury is darker and
+            // less colourful than the Moon.
+            tex[i] = s * 172;
+            tex[i + 1] = s * 164;
+            tex[i + 2] = s * 154;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+/* ==========================================================================
+ * VENUS — no surface is visible at all, only the top of a 20 km cloud deck.
+ * ======================================================================== */
+function buildVenus(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const streaks = makeFbm(12, 5, seed, 4);
+    const fine = makeFbm(26, 12, seed + 331, 3);
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const i = (y * TW + x) * 3;
+            // The atmosphere superrotates — it laps the planet in about four days,
+            // sixty times faster than Venus itself turns — dragging cloud features
+            // into long streaks that sweep back from the equator into the "Y".
+            const shear = (latDeg / 90) * 0.22;
+            let s = 0.9 + (streaks(u + shear, v) - 0.5) * 0.16 + (fine(u, v) - 0.5) * 0.05;
+            // The polar collars are brighter and blander than the mid latitudes.
+            s = mix(s, 1.0, Math.pow(Math.abs(latDeg) / 90, 2.4));
+            s = Math.max(0.55, Math.min(1.12, s));
+            // Sulphuric-acid cloud: cream, tipping to ochre. Almost no blue.
+            tex[i] = s * 238;
+            tex[i + 1] = s * 216;
+            tex[i + 2] = s * 166;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+/* ==========================================================================
+ * EARTH — drawn from real coastlines.
+ *
+ * The outlines below are [longitude, latitude] in degrees, simplified by hand
+ * from real coasts. At this resolution fine coastal detail would be thrown
+ * away anyway, so they keep only the shape each continent is recognised by.
+ * ======================================================================== */
+const EARTH_LAND = [
+    // North America, Central America included
+    [
+        [-165, 68], [-165, 58], [-158, 58], [-135, 58], [-130, 52], [-125, 48],
+        [-124, 40], [-120, 34], [-117, 32], [-108, 23], [-105, 20], [-97, 18],
+        [-92, 15], [-88, 14], [-83, 9], [-79, 8], [-77, 8], [-80, 22], [-81, 30],
+        [-75, 35], [-70, 42], [-66, 44], [-60, 47], [-64, 50], [-56, 51],
+        [-60, 58], [-70, 60], [-78, 63], [-85, 67], [-95, 69], [-110, 72],
+        [-125, 70], [-140, 70], [-155, 71], [-165, 68],
+    ],
+    // Greenland
+    [
+        [-45, 60], [-42, 65], [-30, 70], [-22, 76], [-35, 82], [-55, 82],
+        [-68, 76], [-60, 68], [-50, 62], [-45, 60],
+    ],
+    // South America
+    [
+        [-79, 8], [-77, 2], [-75, -3], [-70, -5], [-70, -15], [-70, -22],
+        [-70, -30], [-71, -38], [-73, -45], [-75, -52], [-69, -55], [-65, -52],
+        [-62, -42], [-58, -35], [-53, -34], [-48, -26], [-40, -14], [-35, -8],
+        [-38, -5], [-45, -1], [-50, 0], [-55, 5], [-60, 8], [-65, 10], [-72, 11],
+        [-79, 8],
+    ],
+    // Africa, with the Arabian Peninsula attached as it reads at this scale
+    [
+        [-17, 15], [-16, 21], [-10, 28], [-6, 33], [0, 37], [10, 37], [20, 33],
+        [25, 32], [32, 31], [35, 32], [36, 27], [42, 17], [43, 12], [51, 12],
+        [58, 22], [50, 25], [48, 12], [44, 11], [43, 2], [40, -3], [40, -10],
+        [35, -20], [35, -26], [32, -29], [27, -33], [20, -34], [17, -32],
+        [14, -22], [12, -17], [10, -6], [9, 3], [4, 6], [-3, 5], [-8, 5],
+        [-12, 8], [-17, 15],
+    ],
+    // Europe
+    [
+        [-9, 43], [-9, 37], [-6, 36], [0, 38], [3, 43], [8, 44], [13, 46],
+        [13, 42], [18, 40], [23, 37], [27, 37], [27, 41], [30, 46], [28, 50],
+        [23, 54], [20, 54], [14, 54], [10, 54], [5, 51], [4, 51], [-2, 51],
+        [-5, 49], [-9, 48], [-9, 43],
+    ],
+    // Asia — Turkey through Kamchatka, down through India and Indonesia
+    [
+        [27, 37], [35, 37], [35, 42], [40, 41], [48, 41], [55, 45], [60, 55],
+        [55, 65], [60, 70], [75, 72], [90, 73], [105, 73], [125, 72], [140, 70],
+        [160, 62], [170, 65], [178, 68], [180, 66], [170, 60], [158, 53],
+        [140, 46], [130, 42], [122, 38], [121, 31], [122, 25], [110, 21],
+        [108, 16], [102, 10], [100, 6], [104, 1], [110, -3], [116, -7], [120, -8],
+        [130, -8], [140, -5], [141, 0], [130, 5], [120, 8], [110, 12], [98, 10],
+        [92, 22], [88, 22], [80, 8], [77, 8], [73, 20], [68, 24], [62, 25],
+        [58, 27], [55, 27], [50, 30], [48, 30], [45, 30], [40, 33], [35, 32],
+        [27, 37],
+    ],
+    // Australia
+    [
+        [113, -22], [114, -26], [115, -34], [118, -35], [130, -32], [136, -35],
+        [140, -38], [147, -38], [150, -37], [153, -28], [153, -20], [145, -17],
+        [143, -11], [137, -12], [132, -12], [130, -14], [126, -14], [122, -18],
+        [113, -22],
+    ],
+];
+/** Bounding boxes, so most ocean pixels are rejected without any real work. */
+const EARTH_BBOX = EARTH_LAND.map((poly) => {
+    let x0 = 180, x1 = -180, y0 = 90, y1 = -90;
+    for (const [lon, lat] of poly) {
+        if (lon < x0)
+            x0 = lon;
+        if (lon > x1)
+            x1 = lon;
+        if (lat < y0)
+            y0 = lat;
+        if (lat > y1)
+            y1 = lat;
+    }
+    return [x0, x1, y0, y1];
+});
+function pointInPolygon(lon, lat, poly) {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+        const [xi, yi] = poly[i];
+        const [xj, yj] = poly[j];
+        if (yi > lat !== yj > lat && lon < ((xj - xi) * (lat - yi)) / (yj - yi) + xi) {
+            inside = !inside;
+        }
+    }
+    return inside;
+}
+const ANTARCTIC_LAT = -63;
+function isLand(lonDeg, latDeg) {
+    if (latDeg < ANTARCTIC_LAT)
+        return true;
+    for (let p = 0; p < EARTH_LAND.length; p++) {
+        const [x0, x1, y0, y1] = EARTH_BBOX[p];
+        if (lonDeg < x0 || lonDeg > x1 || latDeg < y0 || latDeg > y1)
+            continue;
+        if (pointInPolygon(lonDeg, latDeg, EARTH_LAND[p]))
+            return true;
+    }
+    return false;
+}
+function buildEarth(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const ground = makeFbm(40, 20, seed, 4);
+    const sea = makeFbm(16, 8, seed + 411, 3);
+    const cloud = makeFbm(14, 7, seed + 977, 4);
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        const absLat = Math.abs(latDeg);
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const lonDeg = u * 360 - 180;
+            const i = (y * TW + x) * 3;
+            const n = ground(u, v);
+            let r, g, b;
+            if (isLand(lonDeg, latDeg)) {
+                if (absLat > 76) {
+                    // Ice sheet
+                    r = mix(226, 246, n);
+                    g = mix(233, 249, n);
+                    b = mix(238, 252, n);
+                }
+                else if (absLat > 58) {
+                    // Boreal forest and tundra
+                    r = mix(88, 122, n);
+                    g = mix(104, 132, n);
+                    b = mix(84, 102, n);
+                }
+                else if (absLat > 15 && absLat < 35) {
+                    // The arid belt — the Sahara, Arabia, the Kalahari, the Australian
+                    // interior all sit here, put there by the same descending air.
+                    r = mix(176, 214, n);
+                    g = mix(144, 180, n);
+                    b = mix(92, 122, n);
+                }
+                else {
+                    // Temperate and tropical vegetation
+                    r = mix(46, 92, n);
+                    g = mix(98, 146, n);
+                    b = mix(48, 74, n);
+                }
+            }
+            else {
+                // Ocean: deep basins are near-black blue, shelves much lighter.
+                const depth = sea(u, v);
+                r = mix(6, 30, depth);
+                g = mix(42, 92, depth);
+                b = mix(102, 158, depth);
+                if (absLat > 68) {
+                    // Sea ice
+                    const ice = clamp01((absLat - 68) / 12);
+                    r = mix(r, 232, ice);
+                    g = mix(g, 240, ice);
+                    b = mix(b, 246, ice);
+                }
+            }
+            // Cloud, banded the way the real circulation bands it: heavy at the
+            // equator where air rises, thin over the subtropical deserts where it
+            // sinks, heavy again along the mid-latitude storm tracks.
+            const belt = 1.05 * Math.exp(-((latDeg / 11) ** 2)) +
+                0.85 * Math.exp(-(((absLat - 58) / 15) ** 2)) +
+                0.3;
+            const c = clamp01((cloud(u, v) - 0.52) * 3.4) * clamp01(belt);
+            if (c > 0) {
+                const a = smooth(clamp01(c)) * 0.88;
+                r = mix(r, 250, a);
+                g = mix(g, 252, a);
+                b = mix(b, 255, a);
+            }
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+/* ==========================================================================
+ * MARS — real named features at their real areographic coordinates.
+ * ======================================================================== */
+/** lon, lat, lonRadius, latRadius, strength — the classic dark albedo areas. */
+const MARS_DARK = [
+    [70, 8, 18, 16, 1.0], // Syrtis Major Planum
+    [-30, 45, 46, 18, 0.6], // Acidalia Planitia
+    [110, 45, 42, 17, 0.55], // Utopia Planitia
+    [-90, -26, 22, 11, 0.5], // Solis Lacus, the "eye of Mars"
+    [-40, -22, 30, 12, 0.45], // Mare Erythraeum
+    [160, -22, 32, 15, 0.5], // Mare Cimmerium
+    [-150, -18, 30, 14, 0.45], // Mare Sirenum
+    [-60, 18, 16, 10, 0.3], // Lunae Planum
+];
+function buildMars(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const dust = makeFbm(22, 11, seed, 4);
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const lonDeg = u * 360 - 180;
+            const i = (y * TW + x) * 3;
+            const n = dust(u, v);
+            // Base: iron-oxide dust. Butterscotch and ochre — Mars photographs far
+            // browner than the "red planet" name suggests.
+            let r = mix(158, 202, n);
+            let g = mix(102, 142, n);
+            let b = mix(72, 102, n);
+            // Bright, dust-mantled highlands.
+            let bright = 0;
+            bright = Math.max(bright, feature(lonDeg, latDeg, 70, -42, 22, 15) * 0.95); // Hellas Planitia
+            bright = Math.max(bright, feature(lonDeg, latDeg, 0, 22, 36, 21) * 0.6); // Arabia Terra
+            bright = Math.max(bright, feature(lonDeg, latDeg, -105, 2, 35, 23) * 0.65); // Tharsis rise
+            bright = Math.max(bright, feature(lonDeg, latDeg, 150, 25, 27, 17) * 0.45); // Elysium Planitia
+            r = mix(r, 228, bright * 0.6);
+            g = mix(g, 158, bright * 0.6);
+            b = mix(b, 112, bright * 0.6);
+            // Dark basaltic sand. Grey-brown, never black — these are the markings
+            // that first let astronomers time Mars's rotation.
+            let dark = 0;
+            for (let k = 0; k < MARS_DARK.length; k++) {
+                const f = MARS_DARK[k];
+                const d = feature(lonDeg, latDeg, f[0], f[1], f[2], f[3]) * f[4];
+                if (d > dark)
+                    dark = d;
+            }
+            r = mix(r, 84, dark * 0.95);
+            g = mix(g, 62, dark * 0.95);
+            b = mix(b, 52, dark * 0.95);
+            // Valles Marineris — 4,000 km of canyon centred near 8°S, 65°W. It is a
+            // shadowed gash, so it darkens whatever it crosses rather than tinting.
+            const vm = feature(lonDeg, latDeg, -63, -9, 46, 4.2);
+            r *= 1 - vm * 0.45;
+            g *= 1 - vm * 0.45;
+            b *= 1 - vm * 0.45;
+            // Olympus Mons, 18.6°N 133.8°W: the tallest volcano in the solar system,
+            // a pale shield with a dark summit caldera.
+            const om = feature(lonDeg, latDeg, -134, 18.6, 8, 7);
+            r = mix(r, 234, om * 0.7);
+            g = mix(g, 176, om * 0.7);
+            b = mix(b, 134, om * 0.7);
+            const caldera = feature(lonDeg, latDeg, -134, 18.6, 2.4, 2.1);
+            r *= 1 - caldera * 0.34;
+            g *= 1 - caldera * 0.34;
+            b *= 1 - caldera * 0.34;
+            // Polar caps of water and carbon-dioxide ice. The southern cap is the
+            // bigger of the two and reaches further toward the equator.
+            const north = clamp01((latDeg - 78) / 10);
+            const south = clamp01((-latDeg - 72) / 15);
+            const ice = smooth(clamp01(Math.max(north, south) * 1.25));
+            r = mix(r, 244, ice);
+            g = mix(g, 247, ice);
+            b = mix(b, 250, ice);
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+/* ==========================================================================
+ * THE GIANTS — banded by latitude, using the real belt and zone structure.
+ *
+ * On Jupiter the pale stripes are "zones" (rising, cooler, higher cloud) and
+ * the dark ones are "belts" (sinking, warmer, deeper cloud). The latitudes
+ * below are the real ones, which is why the pattern is not symmetric.
+ * ======================================================================== */
+const JUPITER_BANDS = [
+    [-90, [116, 102, 92]],
+    [-72, [142, 124, 106]],
+    [-58, [186, 166, 138]],
+    [-47, [214, 196, 166]], // South temperate zone
+    [-38, [148, 106, 78]], // South temperate belt
+    [-30, [226, 208, 174]], // South tropical zone
+    [-20, [180, 110, 74]], // South equatorial belt, southern component
+    [-12, [166, 94, 62]], // South equatorial belt
+    [-7, [234, 216, 178]],
+    [0, [240, 226, 192]], // Equatorial zone
+    [6, [230, 210, 170]],
+    [11, [174, 98, 62]], // North equatorial belt — the darkest, widest belt
+    [17, [158, 86, 54]],
+    [23, [228, 208, 172]], // North tropical zone
+    [31, [150, 108, 80]], // North temperate belt
+    [39, [212, 192, 162]],
+    [49, [168, 148, 124]],
+    [62, [142, 126, 108]],
+    [90, [112, 100, 88]],
+];
+const SATURN_BANDS = [
+    [-90, [146, 124, 92]],
+    [-70, [176, 152, 112]],
+    [-55, [204, 180, 136]],
+    [-40, [222, 200, 154]],
+    [-25, [232, 212, 168]],
+    [-12, [238, 220, 178]],
+    [0, [243, 227, 185]],
+    [12, [237, 219, 175]],
+    [25, [229, 209, 163]],
+    [40, [217, 195, 149]],
+    [55, [197, 173, 128]],
+    [70, [170, 146, 108]],
+    [90, [140, 120, 92]],
+];
+const URANUS_BANDS = [
+    [-90, [156, 208, 208]],
+    [-60, [164, 214, 213]],
+    [-30, [172, 221, 220]],
+    [0, [178, 226, 224]],
+    [30, [174, 223, 221]],
+    [60, [170, 219, 217]],
+    [90, [190, 232, 229]], // the bright polar hood
+];
+const NEPTUNE_BANDS = [
+    [-90, [48, 84, 146]],
+    [-60, [56, 96, 166]],
+    [-40, [63, 107, 181]],
+    [-20, [70, 118, 196]],
+    [0, [77, 128, 206]],
+    [20, [70, 116, 194]],
+    [40, [61, 103, 177]],
+    [60, [54, 92, 162]],
+    [90, [46, 82, 142]],
+];
+function buildJupiter(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const warpN = makeFbm(5, 3, seed, 3);
+    const turbN = makeFbm(26, 9, seed + 701, 4);
+    const rgb = [0, 0, 0];
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const lonDeg = u * 360 - 180;
+            const i = (y * TW + x) * 3;
+            // Belts meander rather than running straight, so displace the latitude
+            // that is looked up instead of the colour that comes out.
+            const latW = latDeg + (warpN(u, v) - 0.5) * 9;
+            bandColor(latW, JUPITER_BANDS, rgb);
+            let [r, g, b] = rgb;
+            const t = (turbN(u, v) - 0.5) * 0.2;
+            r *= 1 + t;
+            g *= 1 + t;
+            b *= 1 + t;
+            // The Great Red Spot: a storm wider than Earth, tracked continuously
+            // since the 1800s, anchored at about 22°S.
+            // The pale hollow the storm carves out of the belt around it. Drawn
+            // first, so the spot itself lands inside it — that bright surround is
+            // most of what makes the GRS stand out in a real photograph.
+            const hollow = feature(lonDeg, latDeg, -25, -22, 36, 16);
+            if (hollow > 0) {
+                r = mix(r, 240, hollow * 0.72);
+                g = mix(g, 226, hollow * 0.72);
+                b = mix(b, 196, hollow * 0.72);
+            }
+            const grs = feature(lonDeg, latDeg, -25, -22, 25, 10.5);
+            if (grs > 0) {
+                const a = smooth(clamp01(grs * 1.35));
+                r = mix(r, 196, a);
+                g = mix(g, 84, a);
+                b = mix(b, 58, a);
+            }
+            // White ovals in the south temperate belt — long-lived anticyclones.
+            let oval = 0;
+            oval = Math.max(oval, feature(lonDeg, latDeg, 95, -41, 9, 4.5));
+            oval = Math.max(oval, feature(lonDeg, latDeg, 130, -41, 7, 3.8));
+            oval = Math.max(oval, feature(lonDeg, latDeg, -100, -35, 8, 4));
+            if (oval > 0) {
+                r = mix(r, 244, oval * 0.75);
+                g = mix(g, 236, oval * 0.75);
+                b = mix(b, 214, oval * 0.75);
+            }
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+function buildSaturn(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const warpN = makeFbm(4, 3, seed, 3);
+    const turbN = makeFbm(20, 8, seed + 617, 4);
+    const rgb = [0, 0, 0];
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const i = (y * TW + x) * 3;
+            // Saturn's bands are far softer than Jupiter's — a deep haze layer sits
+            // above the cloud tops and mutes almost all of the contrast.
+            const latW = latDeg + (warpN(u, v) - 0.5) * 5;
+            bandColor(latW, SATURN_BANDS, rgb);
+            let [r, g, b] = rgb;
+            const t = (turbN(u, v) - 0.5) * 0.075;
+            r *= 1 + t;
+            g *= 1 + t;
+            b *= 1 + t;
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+function buildUranus(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const turbN = makeFbm(14, 6, seed, 3);
+    const rgb = [0, 0, 0];
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const i = (y * TW + x) * 3;
+            bandColor(latDeg, URANUS_BANDS, rgb);
+            let [r, g, b] = rgb;
+            // Voyager 2 flew past and found almost nothing to photograph. Keeping it
+            // nearly featureless is the accurate choice, not a shortcut.
+            const t = (turbN(u, v) - 0.5) * 0.035;
+            r *= 1 + t;
+            g *= 1 + t;
+            b *= 1 + t;
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+function buildNeptune(seed) {
+    const tex = new Uint8ClampedArray(TW * TH * 3);
+    const warpN = makeFbm(5, 3, seed, 3);
+    const turbN = makeFbm(18, 7, seed + 233, 4);
+    const cirrus = makeFbm(22, 8, seed + 881, 3);
+    const rgb = [0, 0, 0];
+    for (let y = 0; y < TH; y++) {
+        const v = (y + 0.5) / TH;
+        const latDeg = 90 - v * 180;
+        for (let x = 0; x < TW; x++) {
+            const u = (x + 0.5) / TW;
+            const lonDeg = u * 360 - 180;
+            const i = (y * TW + x) * 3;
+            const latW = latDeg + (warpN(u, v) - 0.5) * 6;
+            bandColor(latW, NEPTUNE_BANDS, rgb);
+            let [r, g, b] = rgb;
+            const t = (turbN(u, v) - 0.5) * 0.11;
+            r *= 1 + t;
+            g *= 1 + t;
+            b *= 1 + t;
+            // The Great Dark Spot Voyager 2 saw at 22°S in 1989 — a storm the size
+            // of Eurasia, and a hole in the methane deck rather than a cloud.
+            const gds = feature(lonDeg, latDeg, -30, -22, 24, 10);
+            const ga = smooth(clamp01(gds * 1.2));
+            r = mix(r, 24, ga * 0.9);
+            g = mix(g, 46, ga * 0.9);
+            b = mix(b, 100, ga * 0.9);
+            // Bright methane-ice cirrus, including the companion clouds that trailed
+            // the dark spot along its southern edge.
+            let bright = clamp01((cirrus(u, v) - 0.68) * 4) * 0.34;
+            bright = Math.max(bright, feature(lonDeg, latDeg, -30, -33, 16, 4.5) * 0.6);
+            bright = Math.max(bright, feature(lonDeg, latDeg, 60, -42, 20, 5.5) * 0.42);
+            if (bright > 0) {
+                r = mix(r, 226, bright);
+                g = mix(g, 238, bright);
+                b = mix(b, 250, bright);
+            }
+            tex[i] = r;
+            tex[i + 1] = g;
+            tex[i + 2] = b;
+        }
+    }
+    flattenPoles(tex);
+    return tex;
+}
+/* ==========================================================================
+ * Saturn's rings — real radii, in units of Saturn's own radius.
+ *
+ * The gap between the B and A rings is the Cassini Division, 4,800 km wide
+ * and visible in a small telescope, so it is left empty here rather than
+ * shaded: it is the feature that makes the rings read as rings.
+ * ======================================================================== */
+/** [inner radius, outer radius, opacity] */
+const RING_BANDS = [
+    [1.24, 1.52, 0.2], // C ring — thin and translucent
+    [1.53, 1.95, 0.88], // B ring — the bright one
+    [2.03, 2.21, 0.58], // A ring, inside the Encke Gap
+    [2.23, 2.27, 0.42], // A ring, outside it
+];
+/** Globe radius as a fraction of the canvas when rings have to fit as well. */
+const RING_GLOBE_R = 0.205;
+/* --- dispatch ------------------------------------------------------------- */
+function buildTexture(kind, seed) {
+    switch (kind) {
+        case "mercury": return buildMercury(seed);
+        case "venus": return buildVenus(seed);
+        case "earth": return buildEarth(seed);
+        case "mars": return buildMars(seed);
+        case "jupiter": return buildJupiter(seed);
+        case "saturn": return buildSaturn(seed);
+        case "uranus": return buildUranus(seed);
+        case "neptune": return buildNeptune(seed);
+    }
+}
+
+/* >>> end generated <<< */
+/* --- sphere renderer (mirrors src/components/Planet.tsx) ----------------- */
+function renderPlanet(canvas,{color,kind,size,tilt,rings,rot}){
+ const ctx=canvas.getContext('2d');const dpr=2;const S=Math.round(size*dpr);
+ canvas.width=S;canvas.height=S;canvas.style.width=size+'px';canvas.style.height=size+'px';
+ const seed=Math.abs([...kind].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7));
+ const tex=buildTexture(kind,seed);const[cr,cg,cb]=hexToRgb(color);
+ const R=S*(rings?RING_GLOBE_R:0.44),cx=S/2,cy=S/2,N=S*S;
+ const mask=new Uint8Array(N),uBase=new Float32Array(N),vRow=new Int32Array(N),light=new Float32Array(N);
+ const t=tilt*Math.PI/180,cosT=Math.cos(t),sinT=Math.sin(t);
+ const LX=-.52,LY=.42,LZ=.74;
+ for(let y=0;y<S;y++)for(let x=0;x<S;x++){const i=y*S+x;
+  const dx=(x-cx)/R,dy=(y-cy)/R,d2=dx*dx+dy*dy;if(d2>1)continue;
+  const nx=dx,ny=-dy,nz=Math.sqrt(1-d2);
+  const nyT=ny*cosT-nz*sinT,nzT=ny*sinT+nz*cosT;
+  const lat=Math.asin(Math.max(-1,Math.min(1,nyT))),lon=Math.atan2(nx,nzT);
+  mask[i]=1;uBase[i]=lon/(Math.PI*2)+.5;
+  vRow[i]=Math.min(TH-1,Math.max(0,Math.floor((.5-lat/Math.PI)*TH)));
+  const diff=Math.max(0,nx*LX+ny*LY+nz*LZ);light[i]=.1+Math.pow(diff,.85)*.95}
+ const img=ctx.createImageData(S,S),data=img.data;
+ for(let i=0;i<N;i++)data[i*4+3]=mask[i]?255:0;
+ const rim=document.createElement('canvas');rim.width=rim.height=S;
+ {const rc=rim.getContext('2d');const g=rc.createRadialGradient(cx,cy,R*.86,cx,cy,R*1.28);
+  g.addColorStop(0,`rgba(${cr},${cg},${cb},0)`);g.addColorStop(.32,`rgba(${cr},${cg},${cb},0.30)`);
+  g.addColorStop(.6,`rgba(${cr},${cg},${cb},0.10)`);g.addColorStop(1,`rgba(${cr},${cg},${cb},0)`);
+  rc.fillStyle=g;rc.fillRect(0,0,S,S)}
+ function drawRings(front){const rc=ctx;rc.save();
+  if(front){rc.beginPath();rc.rect(0,0,S,S);rc.arc(cx,cy,R,0,Math.PI*2,true);rc.clip('evenodd')}
+  rc.translate(cx,cy);rc.rotate(-t*.9);rc.scale(1,.26);
+  for(const[r0,r1,alpha]of RING_BANDS){const g=rc.createRadialGradient(0,0,R*r0,0,0,R*r1);
+   g.addColorStop(0,`rgba(${cr},${cg},${cb},0)`);g.addColorStop(.5,`rgba(255,246,224,${alpha})`);
+   g.addColorStop(1,`rgba(${cr},${cg},${cb},0)`);
+   rc.beginPath();rc.arc(0,0,R*(r0+r1)/2,front?0:Math.PI,front?Math.PI:Math.PI*2);
+   rc.lineWidth=R*(r1-r0);rc.strokeStyle=g;rc.stroke()}
+  rc.restore()}
+ ctx.clearRect(0,0,S,S);
+ if(rings)drawRings(false);
+ for(let i=0;i<N;i++){if(!mask[i])continue;let u=uBase[i]+rot;u-=Math.floor(u);
+  const ti=(vRow[i]*TW+((u*TW)|0))*3,l=light[i],p=i*4;
+  data[p]=tex[ti]*l;data[p+1]=tex[ti+1]*l;data[p+2]=tex[ti+2]*l}
+ ctx.putImageData(img,0,0);
+ ctx.globalCompositeOperation='lighter';ctx.drawImage(rim,0,0);ctx.globalCompositeOperation='source-over';
+ if(rings)drawRings(true)}
+
+
+/* ══ Bilingual content rendering ══════════════════════════════════════════
+   Everything below reads from the generated PLANETS / UI / DATA_LABELS above,
+   so this preview shows the same copy and the same numbers as the real app.
+   Strings that exist only in this preview page live in PREVIEW.            */
+
+const PREVIEW = {
+  cards: {
+    ar: "بطاقة 21st.dev «Glowing Stars» بعد تلبيسها على الثيم. النجوم داخل البطاقة تتوهج عند المرور، والتوهج البنفسجي حول الحدود.",
+    en: "The 21st.dev “Glowing Stars” card, themed. The stars inside glow on hover, and the violet bloom sits around the border.",
+  },
+  tableTitle: { ar: "جدول بيانات الكوكب", en: "Planet data table" },
+  tableSub: {
+    ar: "جدول shadcn/ui — مجاني عن طريق الـ CLI، لم يُصرف عليه استرجاع. الأرقام بأرقام جدولية حتى تصطف الخانات.",
+    en: "The shadcn/ui table — free via the CLI, no retrieval spent on it. Figures are set in tabular numerals so the columns line up.",
+  },
+  paletteTitle: { ar: "البالتة ونسب التباين", en: "Palette and contrast ratios" },
+  paletteSub: {
+    ar: "كل لون نص هنا مقيس على الخلفية #05060D. الحد الأدنى المقبول ٤.٥:١ للنص العادي.",
+    en: "Every text colour here is measured against the #05060D background. The minimum for body text is 4.5:1.",
+  },
+  fonts: {
+    ar: "الخطوط: Readex Pro للعناوين، وIBM Plex Sans Arabic للنص — كلاهما يدعم العربية واللاتينية معاً.",
+    en: "Type: Readex Pro for headings, IBM Plex Sans Arabic for body — both cover Arabic and Latin.",
+  },
+  bgOnly: { ar: "خلفية فقط", en: "background only" },
+};
+
+const SWATCHES = [
+  [{ ar: "أسود عميق", en: "Deep black" }, "#05060d", { ar: "الخلفية", en: "Background" }],
+  [{ ar: "سطح", en: "Surface" }, "#0c0e1a", { ar: "البطاقات", en: "Cards" }],
+  [{ ar: "سطح مرتفع", en: "Raised surface" }, "#141830", { ar: "التمرير", en: "Hover" }],
+  [{ ar: "بنفسجي", en: "Violet" }, "#7c3aed", { ar: "التوهج", en: "Glow" }],
+  [{ ar: "بنفسجي فاتح", en: "Light violet" }, "#a78bfa", { ar: "نص/تأكيد", en: "Text / accent" }],
+  [{ ar: "نيلي", en: "Indigo" }, "#4338ca", { ar: "التدرجات", en: "Gradients" }],
+  [{ ar: "سماوي", en: "Celeste" }, "#5fd8ff", { ar: "روابط/تركيز", en: "Links / focus" }],
+  [{ ar: "حبر", en: "Ink" }, "#f8fafc", { ar: "النص الأساسي", en: "Body text" }],
+  [{ ar: "حبر خافت", en: "Muted ink", }, "#94a3b8", { ar: "نص ثانوي", en: "Secondary text" }],
+];
+
+const AR_DIGITS = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+
+/* WCAG relative luminance and contrast ratio, so the palette table below
+   reports measured numbers rather than numbers someone typed in once. */
+function lum(hex) {
+  const [r, g, b] = parseRGB(hex).map((v) => {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function ratio(a, b) {
+  const l1 = lum(a), l2 = lum(b);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"]/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]
+  );
+}
+
+function applyLang(lang) {
+  const t = (k, vars) => {
+    let s = UI[k][lang];
+    if (vars) for (const [a, b] of Object.entries(vars)) s = s.split("{" + a + "}").join(b);
+    return s;
+  };
+  const pick = (v) => v[lang];
+  const num = (n) => n.toLocaleString(lang === "ar" ? "ar-EG" : "en-US", { maximumFractionDigits: 3 });
+  const digits = (s) => (lang === "ar" ? s.replace(/[0-9]/g, (d) => AR_DIGITS[+d]) : s);
+
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  if (window.setHeroSide) window.setHeroSide(lang === "ar");
+
+  document.querySelectorAll("[data-t]").forEach((el) => {
+    el.textContent = t(el.dataset.t);
+  });
+  // Two-line headline: the break is part of the design, not of the string.
+  document.querySelectorAll("[data-t2]").forEach((el) => {
+    const [a, b] = el.dataset.t2.split("|");
+    el.innerHTML = esc(t(a)) + "<br>" + esc(t(b));
+  });
+  document.querySelectorAll("[data-p]").forEach((el) => {
+    if (el.tagName !== "CANVAS") el.textContent = pick(PREVIEW[el.dataset.p]);
+  });
+
+  document.querySelectorAll(".langbar button").forEach((b) => {
+    b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
+  });
+
+  /* ── cards ─────────────────────────────────────────────────────────── */
+  document.getElementById("cards").innerHTML = PLANETS.map((p) => {
+    const other = lang === "ar" ? p.name.en : p.name.ar;
+    return `
+ <li><a class="card" href="#" aria-label="${esc(t("card.aria", { name: pick(p.name) }))}">
+  <div class="pwrap"><canvas data-slug="${p.slug}"></canvas></div>
+  <div class="card-head">
+   <div><h3>${esc(pick(p.name))}</h3>
+    <p class="en${lang === "ar" ? "" : " as-arabic"}" dir="${lang === "ar" ? "ltr" : "rtl"}">${esc(other)}</p></div>
+   <span class="chip" style="color:${p.color};background:${p.color}1f;box-shadow:inset 0 0 0 1px ${p.color}33">${esc(pick(p.type))}</span>
+  </div>
+  <p class="tag">${esc(pick(p.tagline))}</p>
+  <dl><div><dt>${esc(t("card.diameter"))}</dt><dd>${esc(num(p.data.diameterKm))} ${esc(t("unit.km"))}</dd></div>
+      <div><dt>${esc(t("card.moons"))}</dt><dd>${esc(num(p.data.moons))}</dd></div></dl>
+ </a></li>`;
+  }).join("");
+
+  document.querySelectorAll("canvas[data-slug]").forEach((cv, i) => {
+    const slug = cv.dataset.slug;
+    const r = RENDER[slug];
+    const p = PLANETS.find((x) => x.slug === slug);
+    renderPlanet(cv, {
+      color: p.color,
+      kind: r.kind,
+      size: r.rings ? 200 : 140,
+      tilt: r.tilt,
+      rings: !!r.rings,
+      rot: i * 0.17,
+    });
+  });
+
+  /* ── table (Saturn) ────────────────────────────────────────────────── */
+  const saturn = PLANETS.find((p) => p.slug === "saturn");
+  document.getElementById("tbody").innerHTML = DATA_LABELS.map(({ key, label, unitKey }) => {
+    const raw = saturn.data[key];
+    let v;
+    if (key === "atmosphere" || key === "moonsAsOf") v = pick(raw);
+    else if (typeof raw === "string") v = digits(raw);
+    else if (key === "rotationHours" && raw < 0) v = t("detail.retrograde", { v: num(Math.abs(raw)) });
+    else v = num(raw);
+    return `<tr><th scope="row">${esc(pick(label))}</th>
+      <td class="val"><bdi>${esc(v)}</bdi></td>
+      <td class="unit">${unitKey ? esc(t(unitKey)) : "—"}</td></tr>`;
+  }).join("");
+
+  /* ── palette, with contrast measured live ──────────────────────────── */
+  document.getElementById("swatches").innerHTML = SWATCHES.map(([name, hex, use]) => {
+    const r = ratio(hex, "#05060d");
+    const isText = r >= 4.5;
+    return `<li class="sw"><div class="chipbox" style="background:${hex}"></div>
+     <div class="meta"><b>${esc(pick(name))}</b><span>${hex.toUpperCase()} · ${esc(pick(use))}</span>
+     <span style="color:${isText ? "#5fd8ff" : "#94a3b8"}"><bdi>${r.toFixed(1)}:1</bdi> ${isText ? "✓ AA" : "— " + esc(pick(PREVIEW.bgOnly))}</span></div></li>`;
+  }).join("");
+}
+
+document.querySelectorAll(".langbar button").forEach((b) => {
+  b.addEventListener("click", () => applyLang(b.dataset.lang));
+});
+
+applyLang(document.documentElement.lang === "en" ? "en" : "ar");
+
+</script>
+</body>
+</html>

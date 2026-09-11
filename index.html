@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05060D" />
+    <meta
+      name="description"
+      content="رحلة بصرية في المجموعة الشمسية: الكواكب الثمانية ببياناتها الحقيقية، وتاريخ الكون من الانفجار العظيم لليوم."
+    />
+    <title>Cosmos — الكواكب والفضاء</title>
+    <!-- Applies the saved language before the first paint. Without it an
+         English visitor gets one right-to-left frame before React corrects it,
+         which is visible as the whole layout jumping sides. -->
+    <script>
+      try {
+        var l = localStorage.getItem("cosmos-lang");
+        if (l === "en") {
+          document.documentElement.lang = "en";
+          document.documentElement.dir = "ltr";
+        }
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- IBM Plex Sans Arabic carries the Arabic; IBM Plex Mono is Latin-only and
+         sits in front of it in the stack, so Latin digits render monospaced and
+         Arabic-Indic digits fall through to the Arabic face. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
