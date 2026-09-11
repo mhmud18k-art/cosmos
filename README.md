@@ -10,6 +10,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-A78BFA)](LICENSE)
 
+### [▶ Open the live site](https://mhmud18k-art.github.io/cosmos/)
+
 English · [العربية](#بالعربية)
 
 </div>
@@ -106,6 +108,8 @@ Two hero components are vendored from [21st.dev](https://21st.dev) and left unmo
 <div dir="rtl">
 
 ## بالعربية
+
+**[افتح الموقع مباشرة ◀](https://mhmud18k-art.github.io/cosmos/)**
 
 **كوزموس** — موقع متعدد الصفحات عن المجموعة الشمسية، بالعربية والإنجليزية مع دعم كامل للاتجاه من اليمين إلى اليسار.
 
