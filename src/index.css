@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Cosmos — design tokens
+   Derived from ui-ux-pro-max: pattern "Immersive/Interactive Experience",
+   style "HUD / Sci-Fi FUI", blended with the brief's violet + deep-blue ask.
+   Every text pair below is checked against WCAG AA (4.5:1) on --color-void.
+   ========================================================================== */
+
+@theme {
+  /* --- surfaces: deep black → dark blue --- */
+  --color-void: #05060d; /* page background */
+  --color-surface: #0c0e1a; /* cards, panels */
+  --color-surface-2: #141830; /* raised / hover */
+  --color-surface-3: #1c2145; /* table header, active */
+
+  /* --- accents: violet + celestial blue --- */
+  --color-violet: #7c3aed;
+  --color-violet-soft: #a78bfa; /* 7.1:1 on --color-void — safe for text */
+  --color-indigo: #4338ca;
+  --color-celeste: #5fd8ff; /* 11.4:1 on --color-void — safe for text */
+
+  /* --- text --- */
+  --color-ink: #f8fafc; /* 18.4:1 — body + headings */
+  --color-ink-muted: #94a3b8; /* 7.2:1 — secondary text, still AA */
+  --color-ink-faint: #64748b; /* 3.6:1 — LARGE TEXT / non-text only */
+
+  /* --- lines --- */
+  --color-hairline: rgba(255, 255, 255, 0.08);
+  --color-hairline-strong: rgba(255, 255, 255, 0.16);
+
+  /* --- state --- */
+  --color-danger: #f87171;
+
+  /* --- type ---
+     The first pick here was Exo, which has no Arabic glyphs at all — every
+     Arabic word on the site was silently falling back to the OS default. If you
+     swap these, check the family actually ships Arabic before shipping it.
+
+     IBM Plex Mono is Latin-only by design, so it sits IN FRONT of the Arabic
+     face rather than replacing it: Latin digits render monospaced, and
+     Arabic-Indic digits (٠١٢٣) fall through to IBM Plex Sans Arabic instead of
+     landing on a system font that does not match. */
+  /* Two Arabic faces on purpose: Readex Pro has the wider, more open counters
+     that carry a large heading, and IBM Plex Sans Arabic is the steadier read
+     at body size. Using one for both is what made the earlier pass feel flat. */
+  --font-heading: "Readex Pro", "IBM Plex Sans Arabic", ui-sans-serif, sans-serif;
+  --font-display: "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "IBM Plex Sans Arabic", ui-monospace, monospace;
+
+  /* --- motion --- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 16px; /* never below 16 for body */
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Headings take the display face and a tighter fit automatically, so no
+     component has to remember to ask for it. Arabic has no descender-heavy
+     lowercase, so headings can sit tighter than a Latin equivalent without
+     the lines colliding. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  h1 {
+    line-height: 1.15;
+  }
+
+  /* Numeric data reads as data. */
+  .tabular {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* WCAG 2.2: focus indicator ≥ 2px perimeter, ≥ 3:1 against its background.
+     Never remove this — replace it if you must restyle. */
+  :where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-celeste);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-violet);
+    color: var(--color-ink);
+  }
+}
+
+/* These are declared with `@utility`, not `@layer utilities`.
+   The difference matters: only `@utility` registers a real Tailwind utility, so
+   `group-hover:glow-violet` and `group-focus-visible:glow-celeste` compile.
+   A plain class in `@layer utilities` silently produces nothing under a variant,
+   which is exactly how a hover glow ends up missing with no error to explain it. */
+
+/* The celestial glow the brief asks for, as a token rather than ad-hoc shadows. */
+@utility glow-violet {
+  box-shadow:
+    0 0 0 1px rgba(167, 139, 250, 0.14),
+    0 0 24px -6px rgba(124, 58, 237, 0.5),
+    0 0 64px -24px rgba(124, 58, 237, 0.4);
+}
+
+@utility glow-celeste {
+  box-shadow:
+    0 0 0 1px rgba(95, 216, 255, 0.16),
+    0 0 24px -6px rgba(95, 216, 255, 0.42);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 28px rgba(167, 139, 250, 0.45);
+}
+
+/* Nebula wash used behind page headers. */
+@utility nebula {
+  background-image:
+    radial-gradient(60% 50% at 15% 0%, rgba(67, 56, 202, 0.28), transparent 70%),
+    radial-gradient(50% 45% at 85% 10%, rgba(124, 58, 237, 0.22), transparent 70%);
+}
+
+/* The whole site is motion-forward, so this is not optional.
+   Anything decorative stops; nothing that conveys meaning disappears. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
